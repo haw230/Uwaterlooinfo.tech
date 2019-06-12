@@ -1,11 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>Hello World</title>
-		<script src="popup.js"></script>
-	</head>
-		<body>
-		<h1>Hello World</h1>
-		<button id="checkPage">Check this page now!</button>
-	</body>
+<head>
+	<title>My First Chrome Extension</title>
+	<link rel="stylesheet" type="text/css" href="popup.css">
+	<script type="text/javascript" src="jquery-3.4.1.js"></script>
+	<script type="text/javascript" src="popup.js"></script>
+</head>
+<body>
+	<div id="popup">
+		<h1>Course Information</h1>
+		<input type="search" name="" id="searchBox">
+		<button id="searchButton">Search</button>
+		<div id="courseInfo">
+			<p id="title"></p>
+			<p id="description"></p>
+			<p id="antirequisites"></p>
+			<p id="corequisites"></p>
+			<p id="prerequisites"></p>
+		</div>
+	</div>
+</body>
 </html>

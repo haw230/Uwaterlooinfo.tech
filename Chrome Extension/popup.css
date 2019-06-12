@@ -1,0 +1,13 @@
+#popup {
+	width:300px;
+	text-align:center;
+	margin: 10px 10px 20px 10px;
+}
+
+#courseInfo {
+	text-align: left;
+}
+
+input {
+	outline: none;
+}
