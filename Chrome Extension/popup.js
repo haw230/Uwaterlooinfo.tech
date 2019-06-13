@@ -12,7 +12,6 @@ function ajaxRequestSubject(subject, number) {
 				$("#error").html("Invalid course code");
 			}
 			else {
-				//console.log(result);
 				updateCourseInfo(result.data);
 			}
 		},
@@ -38,16 +37,17 @@ $(document).ready(function() {
 })
 
 function searchCourse() {
-	let input = $("#searchBox").val().replace(/ /g, '');
+	if (typeof $("#searchBox").val() !== undefined) {
+		let input = $("#searchBox").val().replace(/ /g, '');
 
-	if (input.length > 0) {
-		let index = firstNumberIndex(input);
-		let course = [input.substring(0, index), input.substring(index)];
-		console.log(course);
-		ajaxRequestSubject(course[0], course[1]);
-	}
-	else {
-		ajaxRequestSubject("default", "default");
+		if (input.length > 0) {
+			let index = firstNumberIndex(input);
+			let course = [input.substring(0, index), input.substring(index)];
+			ajaxRequestSubject(course[0], course[1]);
+		}
+		else {
+			ajaxRequestSubject("default", "default");
+		}
 	}
 }
 
@@ -67,6 +67,9 @@ function updateCourseInfo(json) {
 	$("#antirequisites").html(`<span>Antirequisites:</span> ${json.antirequisites}`);
 	$("#corequisites").html(`<span>Corequisites:</span> ${json.corequisites}`);
 	$("#prerequisites").html(`<span>Prerequisites:</span> ${json.prerequisites}`);
+	$("#links").html(
+		`<span>Links:</span> <a href=${json.url} target="_blank">UWCalender</a>
+		<a href=https://uwflow.com/course/${json.subject.toLowerCase()}${json.catalog_number} target="_blank">UWflow</a>`);
 }
 
 function clearCourseInfo() {
@@ -76,4 +79,5 @@ function clearCourseInfo() {
 	$("#antirequisites").html("");
 	$("#corequisites").html("");
 	$("#prerequisites").html("");
+	$("#links").html("");
 }
