@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>My First Chrome Extension</title>
-	<link rel="stylesheet" type="text/css" href="popup.css">
+	<title>Course Information Finder</title>
+
+	<!-- JS file -->
 	<script type="text/javascript" src="jquery-3.4.1.js"></script>
 	<script type="text/javascript" src="popup.js"></script>
+
+	<!-- CSS file -->
+	<link rel="stylesheet" type="text/css" href="popup.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
 </head>
 <body>
 	<div id="popup">
 		<h1>Course Information</h1>
-		<input type="search" name="" id="searchBox">
-		<button id="searchButton">Search</button>
+		<img id="logo" src="UniversityOfWaterloo.png" />
+		<div id="searchArea">
+			<input type="search" name="" id="searchBox">
+			<button id="searchButton"><i class="fas fa-arrow-right"></i></button>
+		</div>
 		<div id="courseInfo">
+			<h3 id="error"></h3>
 			<p id="title"></p>
 			<p id="description"></p>
 			<p id="antirequisites"></p>

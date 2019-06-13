@@ -1,13 +1,62 @@
 #popup {
 	width:300px;
 	text-align:center;
-	margin: 10px 10px 20px 10px;
+	margin: 10px 10px 25px 10px;
+}
+
+#logo {
+	width: 250px;
 }
 
 #courseInfo {
 	text-align: left;
 }
 
-input {
+#courseInfo span {
+	font-weight: bold;
+}
+
+#courseInfo #error {
+	text-align: center;
+}
+
+#searchArea {
+	margin-top: 15px;
+}
+
+#searchArea #searchBox {
+	border-radius: 3px;
+	box-shadow: none;
+	border-width: 2px;
+	border-color: #A9A9A9;
+	border-style: solid;
+	transition: 0.7s;
+}
+
+#searchArea #searchBox:focus {
+	border-color: #000000;
+}
+
+#searchArea #searchButton {
+	border-radius: 3px;
+	box-shadow: none;
+	border-width: 2px;
+	border-color: #A9A9A9;
+	border-style: solid;
+	transition: 1s;
+	background-color: #b3b3ff;
+}
+
+#searchArea #searchButton:hover {
+	background-color: #9999ff;
+	border-color: #000000;
+	cursor: pointer;
+}
+
+#searchArea #searchButton i {
+	color: white;
+}
+
+input, button {
 	outline: none;
 }

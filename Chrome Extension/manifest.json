@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
-	"name": "My Cool Extension",
-	"description": "This is my first Chrome extenstion",
+	"name": "UW Course Information Finder",
+	"description": "This is used for finding information on existing courses at the University of Waterloo",
 	"version": "0.1",
 	"permissions": ["https://api.uwaterloo.ca/v2/*"],
 	"background": {
@@ -18,6 +18,6 @@
 	"browser_action": {
 		"default_icon": "icon.png",
 		"default_popup": "popup.html",
-		"default_title": "My Cool Extension"
+		"default_title": "UW Course Information Finder"
 	}
 }
