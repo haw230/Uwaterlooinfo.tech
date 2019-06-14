@@ -13,6 +13,7 @@ function ajaxRequestSubject(subject, number) {
 			}
 			else {
 				updateCourseInfo(result.data);
+				ajaxRequestSchedule(subject, number);
 			}
 		},
 		error: function(xhr, status, error) {
@@ -21,6 +22,51 @@ function ajaxRequestSubject(subject, number) {
   			console.log(err.Message);
 		},
 	});
+}
+
+function ajaxRequestSchedule(subject, number) {
+	$.ajax({
+		type: "GET",
+		url: `https://api.uwaterloo.ca/v2/courses/${subject}/${number}/schedule.json`,
+		dataType: "json",
+		data: {key: "043f31a8bada20f13b879fea1e64af16"},
+		success: function(result) {
+
+			if (jQuery.isEmptyObject(result.data)) {
+
+			}
+			else {
+				//console.log(result.data);
+				parseSchedule(result.data);
+			}
+		},
+		error: function(xhr, status, error) {
+			console.log("error");
+  			let err = JSON.parse(xhr.responseText);
+  			console.log(err.Message);
+		},
+	});
+}
+
+function parseSchedule(data) {
+	let sections = data.length;
+	let schedule = [];
+
+	for (let i = 0; i < sections; i++) {
+
+		let classes = data[i].classes.length;
+		let time = [];
+		for (let j = 0; j < classes; j++) {
+			let dates = data[i].classes[j].date;
+			let location = data[i].classes[j].location;
+			time.push([dates.start_time, dates.end_time, dates.weekdays, location.building, location.room]);
+		}
+
+		let json =
+		{"section": data[i].section, "instructor": data[i].classes[0].instructors, "date": time,
+		"capacity": data[i].enrollment_capacity, "enrollment": data[i].enrollment_total};
+		console.log(json);
+	}
 }
 
 $(document).ready(function() {
