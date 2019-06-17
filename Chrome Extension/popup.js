@@ -1,6 +1,7 @@
-function ajaxRequestSubject(subject, number) {
+function ajaxRequestSubject(subject, number, term) {
 	$.ajax({
 		type: "GET",
+		//url: `https://api.uwaterloo.ca/v2/courses/term/${term}/${subject}/${number}.json`,
 		url: `https://api.uwaterloo.ca/v2/courses/${subject}/${number}.json`,
 		dataType: "json",
 		data: {key: "043f31a8bada20f13b879fea1e64af16"},
@@ -12,8 +13,8 @@ function ajaxRequestSubject(subject, number) {
 				$("#error").html("Invalid course code");
 			}
 			else {
+				ajaxCall(`https://api.uwaterloo.ca/v2/courses/${subject}/${number}/schedule.json`, parseSchedule);
 				updateCourseInfo(result.data);
-				ajaxRequestSchedule(subject, number);
 			}
 		},
 		error: function(xhr, status, error) {
@@ -24,21 +25,15 @@ function ajaxRequestSubject(subject, number) {
 	});
 }
 
-function ajaxRequestSchedule(subject, number) {
+function ajaxCall(url, onSuccess) {
 	$.ajax({
 		type: "GET",
-		url: `https://api.uwaterloo.ca/v2/courses/${subject}/${number}/schedule.json`,
+		url: url,
 		dataType: "json",
 		data: {key: "043f31a8bada20f13b879fea1e64af16"},
 		success: function(result) {
-
-			if (jQuery.isEmptyObject(result.data)) {
-
-			}
-			else {
-				//console.log(result.data);
-				parseSchedule(result.data);
-			}
+			console.log(result);
+			return onSuccess(result.data);
 		},
 		error: function(xhr, status, error) {
 			console.log("error");
@@ -47,6 +42,13 @@ function ajaxRequestSchedule(subject, number) {
 		},
 	});
 }
+
+
+function currentTerm(data) {
+	console.log(data.current_term);
+	return data.current_term;
+}
+
 
 function parseSchedule(data) {
 	let sections = data.length;
@@ -59,15 +61,96 @@ function parseSchedule(data) {
 		for (let j = 0; j < classes; j++) {
 			let dates = data[i].classes[j].date;
 			let location = data[i].classes[j].location;
-			time.push([dates.start_time, dates.end_time, dates.weekdays, location.building, location.room]);
+			time.push([dates.start_time, dates.end_time, dates.weekdays, `${location.building} ${location.room}`]);
+		}
+
+		let instructors = [];
+
+		for (let j = 0; j < classes; j++) {
+			let name = data[i].classes[j].instructors[0];
+
+			if (name === undefined) {
+				instructors.push("N/A");
+			}
+			else {
+				let lastFirst = name.split(",");
+				instructors.push(`${lastFirst[1]} ${lastFirst[0]}`);
+			}
+
 		}
 
 		let json =
-		{"section": data[i].section, "instructor": data[i].classes[0].instructors, "date": time,
-		"capacity": data[i].enrollment_capacity, "enrollment": data[i].enrollment_total};
-		console.log(json);
+		{"section": data[i].section, "class": data[i].class_number, "campus": data[i].campus,
+		"enrollment": `${data[i].enrollment_total}/${data[i].enrollment_capacity}`, "date": time, 
+		"instructors": instructors};
+		schedule.push(json);
+	}
+
+	let columns = schedule.length;
+
+	const columnsTitle = 
+	`<tr>
+		<th>Section</th>
+		<th>Class</th>
+		<th>Campus</th>
+		<th>Enrolled</th>
+		<th>Time</th>
+		<th>Days</th>
+		<th>Location</th>
+		<th>Instructor(s)</th>
+	</tr>`;
+
+	$("#scheduleTable").append(columnsTitle);
+
+	for (let i = 0; i < columns; i++) {
+		let html = 
+		`<tr>
+		<td>${nullCheck(schedule[i].section)}</td>
+		<td>${nullCheck(schedule[i].class)}</td>
+		<td>${nullCheck(schedule[i].campus)}</td>
+		<td>${nullCheck(schedule[i].enrollment)}</td>
+		<td>${nullCheck(schedule[i].date[0][0])} - ${nullCheck(schedule[i].date[0][1])}`
+
+		let classes = schedule[i].date.length;
+		for (let j = 1; j < classes; j++) {
+			html += `</br>${nullCheck(schedule[i].date[j][0])} - ${nullCheck(schedule[i].date[j][1])}`;
+		}
+		html += `</td>`;
+
+		html += `<td>${nullCheck(schedule[i].date[0][2])}`
+		for (let j = 1; j < classes; j++) {
+			html += `</br>${nullCheck(schedule[i].date[j][2])}`;
+		}
+		html += `</td>`;
+
+		html += `<td>${nullCheck(schedule[i].date[0][3])}`
+		for (let j = 1; j < classes; j++) {
+			html += `</br>${nullCheck(schedule[i].date[j][3])}`;
+		}
+		html += `</td>`;
+
+		html += `<td>${nullCheck(schedule[i].instructors[0])}`
+		for (let j = 1; j < classes; j++) {
+			html += `</br>${nullCheck(schedule[i].instructors[j])}`;
+		}
+		html += `</td>`;
+
+		$("#scheduleTable").append(html);
 	}
 }
+
+
+function nullCheck(string) {
+	string = `${string}`
+
+	if (string.includes("null")) {
+		return "N/A";
+	}
+	else {
+		return string;
+	}
+}
+
 
 $(document).ready(function() {
 
@@ -82,8 +165,10 @@ $(document).ready(function() {
 	});
 })
 
+
 function searchCourse() {
-	if (typeof $("#searchBox").val() !== undefined) {
+	if ($("#searchBox").val() !== undefined) {
+		let term = ajaxCall(`https://api.uwaterloo.ca/v2/terms/list.json`, currentTerm);
 		let input = $("#searchBox").val().replace(/ /g, '');
 
 		if (input.length > 0) {
@@ -97,6 +182,7 @@ function searchCourse() {
 	}
 }
 
+
 function firstNumberIndex(string) {
 	let length = string.length;
 	for (let i = 0; i < length; i++) {
@@ -105,6 +191,7 @@ function firstNumberIndex(string) {
 		}
 	}
 }
+
 
 function updateCourseInfo(json) {
 	//alert(json.title);
@@ -115,8 +202,9 @@ function updateCourseInfo(json) {
 	$("#prerequisites").html(`<span>Prerequisites:</span> ${json.prerequisites}`);
 	$("#links").html(
 		`<span>Links:</span> <a href=${json.url} target="_blank">UWCalender</a>
-		<a href=https://uwflow.com/course/${json.subject.toLowerCase()}${json.catalog_number} target="_blank">UWflow</a>`);
+		<a href=https://uwflow.com/course/${json.subject.toLowerCase()}${json.catalog_number.toLowerCase()} target="_blank">UWflow</a>`);
 }
+
 
 function clearCourseInfo() {
 	$("#error").html("");
@@ -126,4 +214,5 @@ function clearCourseInfo() {
 	$("#corequisites").html("");
 	$("#prerequisites").html("");
 	$("#links").html("");
+	$("#scheduleTable").html("");
 }

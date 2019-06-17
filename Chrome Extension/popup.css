@@ -60,3 +60,40 @@
 input, button {
 	outline: none;
 }
+
+table {
+	border: 1px solid black;
+	border-collapse: collapse;
+	display: block;
+	overflow-x: auto;
+	white-space: nowrap;
+}
+
+table:empty {
+	border: none;
+}
+
+th, td {
+	padding: 2px 8px;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+ 	background: #A9A9A9; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #989898;
+}
