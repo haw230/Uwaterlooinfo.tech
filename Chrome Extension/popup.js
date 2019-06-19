@@ -14,11 +14,14 @@ function ajaxRequestSubject(subject, number, terms) {
 			else {
 				let restCall1 = `https://api.uwaterloo.ca/v2/terms/${terms[0][0]}/${subject}/${number}/schedule.json`;
 				let restCall2 = `https://api.uwaterloo.ca/v2/terms/${terms[1][0]}/${subject}/${number}/schedule.json`;
+				let restCall3 = `https://api.uwaterloo.ca/v2/courses/${subject}/${number}/examschedule.json`;
 
 				$.when(
-					ajaxCall(restCall1, parseSchedule),
+					ajaxCall(restCall1, parseCourseSchedule),
 				).then(function() {
-					return ajaxCall(restCall2, parseSchedule);
+					return ajaxCall(restCall2, parseCourseSchedule);
+				}).then(function() {
+					return ajaxCall(restCall3, parseExamSchedule);
 				}).done(function() {
 					$("#scheduleTable div").each(function(index) {
 						$(this).prepend(`<p>${terms[index][1]}</p>`);
@@ -36,7 +39,7 @@ function ajaxRequestSubject(subject, number, terms) {
 }
 
 
-function ajaxCall(url, onSuccess) {
+function ajaxCall(url, onSuccess = (x) => x) {
 	return $.ajax({
 		type: "GET",
 		url: url,
@@ -82,7 +85,7 @@ function termName(array, term) {
 }
 
 
-function parseSchedule(data) {
+function parseCourseSchedule(data) {
 	let sections = data.length;
 	let schedule = [];
 
@@ -117,11 +120,11 @@ function parseSchedule(data) {
 		"instructors": instructors};
 		schedule.push(json);
 	}
-	renderSchedule(schedule);
+	renderCourseSchedule(schedule);
 }
 
 
-function renderSchedule(schedule) {
+function renderCourseSchedule(schedule) {
 	let columns = schedule.length;
 
 	let table = `<div><table>`;
@@ -132,7 +135,7 @@ function renderSchedule(schedule) {
 		<th>Campus</th>
 		<th>Enrolled</th>
 		<th>Time</th>
-		<th>Days</th>
+		<th>Day(s)</th>
 		<th>Location</th>
 		<th>Instructor(s)</th>
 	</tr>`;
@@ -140,33 +143,33 @@ function renderSchedule(schedule) {
 	for (let i = 0; i < columns; i++) {
 		table +=
 		`<tr>
-		<td>${nullCheck(schedule[i].section)}</td>
-		<td>${nullCheck(schedule[i].class)}</td>
-		<td>${nullCheck(schedule[i].campus)}</td>
-		<td>${nullCheck(schedule[i].enrollment)}</td>
-		<td>${nullCheck(schedule[i].date[0][0])} - ${nullCheck(schedule[i].date[0][1])}`
+		<td>${nullCheck(schedule[i].section, "N/A")}</td>
+		<td>${nullCheck(schedule[i].class, "N/A")}</td>
+		<td>${nullCheck(schedule[i].campus, "N/A")}</td>
+		<td>${nullCheck(schedule[i].enrollment, "N/A")}</td>
+		<td>${nullCheck(schedule[i].date[0][0], "N/A")} - ${nullCheck(schedule[i].date[0][1], "N/A")}`
 
 		let classes = schedule[i].date.length;
 		for (let j = 1; j < classes; j++) {
-			table += `</br>${nullCheck(schedule[i].date[j][0])} - ${nullCheck(schedule[i].date[j][1])}`;
+			table += `</br>${nullCheck(schedule[i].date[j][0], "N/A")} - ${nullCheck(schedule[i].date[j][1], "N/A")}`;
 		}
 		table += `</td>`;
 
-		table += `<td>${nullCheck(schedule[i].date[0][2])}`
+		table += `<td>${nullCheck(schedule[i].date[0][2], "N/A")}`
 		for (let j = 1; j < classes; j++) {
-			table += `</br>${nullCheck(schedule[i].date[j][2])}`;
+			table += `</br>${nullCheck(schedule[i].date[j][2], "N/A")}`;
 		}
 		table += `</td>`;
 
-		table += `<td>${nullCheck(schedule[i].date[0][3])}`
+		table += `<td>${nullCheck(schedule[i].date[0][3], "N/A")}`
 		for (let j = 1; j < classes; j++) {
-			table += `</br>${nullCheck(schedule[i].date[j][3])}`;
+			table += `</br>${nullCheck(schedule[i].date[j][3], "N/A")}`;
 		}
 		table += `</td>`;
 
-		table += `<td>${nullCheck(schedule[i].instructors[0])}`
+		table += `<td>${nullCheck(schedule[i].instructors[0], "N/A")}`
 		for (let j = 1; j < classes; j++) {
-			table += `</br>${nullCheck(schedule[i].instructors[j])}`;
+			table += `</br>${nullCheck(schedule[i].instructors[j], "N/A")}`;
 		}
 		table += `</td>`;
 	}
@@ -175,11 +178,105 @@ function renderSchedule(schedule) {
 }
 
 
-function nullCheck(string) {
+function parseExamSchedule(data) {
+	console.log(data);
+	if (!jQuery.isEmptyObject(data) && !data.sections[0].section.includes("Online")) {
+		let time = JSON.parse(JSON.stringify(data.sections[0]));
+
+		let sections = time.section;
+		let length = data.sections.length;
+
+		for (let i = 1; i < length; i++) {
+			if (!data.sections[i].section.includes("Online")) {
+				sections += `, ${data.sections[i].section}`
+			}
+		}
+		time.section = sections;
+		time.date = formatDate(time.date);
+		renderExamSchedule(time);
+	}
+}
+
+
+function renderExamSchedule(data) {
+	let table = `<p>Final Exam</p><div><table>`;
+	table += 
+	`<tr>
+		<th>Section(s)</th>
+		<th>Date</th>
+		<th>Time</th>
+		<th>Location</th>
+	</tr>`;
+	table +=
+	`<tr>
+		<td>${data.section}</td>
+		<td>${data.date} (${data.day})</td>
+		<td>${data.start_time} - ${data.end_time}</td>
+		<td>${data.location}</td>
+	</tr></table></div>`
+	$("#examTable").append(table);
+}
+
+
+function formatDate(date) {
+	let dateArray = date.split("-");
+	let month = dateArray[1];
+	let day = dateArray[2];
+	return `${getMonth(month)} ${getDay(day)}`
+}
+
+
+function getDay(day) {
+	let lastChar = day[day.length - 1];
+	day = parseInt(day);
+	switch(day) {
+		case 1:
+			return `${day}st`;
+		case 2:
+			return `${day}nd`;
+		case 3:
+			return `${day}rd`;
+		default:
+			return `${day}th`;
+	}
+}
+
+function getMonth(month) {
+	switch(parseInt(month)) {
+		case 1:
+			return "Jan";
+		case 2:
+			return "Feb";
+		case 3:
+			return "Mar";
+		case 4:
+			return "Apr";
+		case 5:
+			return "May";
+		case 6:
+			return "June";
+		case 7:
+			return "July";
+		case 8:
+			return "Aug";
+		case 9:
+			return "Sept";
+		case 10:
+			return "Oct";
+		case 11:
+			return "Nov";
+		case 12:
+			return "Dec";
+		default:
+			return null;
+	}
+}
+
+function nullCheck(string, returnValue) {
 	string = `${string}`
 
 	if (string.includes("null")) {
-		return "N/A";
+		return returnValue;
 	}
 	else {
 		return string;
@@ -190,11 +287,13 @@ function nullCheck(string) {
 $(document).ready(function() {
 
 	$("#searchButton").bind("click", function() {
-		ajaxCall(`https://api.uwaterloo.ca/v2/terms/list.json`, currentTerm);
+		if ($("#searchBox").val() !== undefined) {
+			ajaxCall(`https://api.uwaterloo.ca/v2/terms/list.json`, currentTerm);
+		}
 	});
 
 	$(document).on('keypress',function(e) {
-		if (e.which == 13) {
+		if (e.which == 13 && $("#searchBox").val() !== undefined) {
 			ajaxCall(`https://api.uwaterloo.ca/v2/terms/list.json`, currentTerm);
 		}
 	});
@@ -202,17 +301,15 @@ $(document).ready(function() {
 
 
 function searchCourse(term) {
-	if ($("#searchBox").val() !== undefined) {
-		let input = $("#searchBox").val().replace(/ /g, '');
+	let input = $("#searchBox").val().replace(/ /g, '').replace(/[^\w\s]/gi, '');
 
-		if (input.length > 0) {
-			let index = firstNumberIndex(input);
-			let course = [input.substring(0, index), input.substring(index)];
-			ajaxRequestSubject(course[0], course[1], term);
-		}
-		else {
-			ajaxRequestSubject("default", "default", term);
-		}
+	if (input.length > 0) {
+		let index = firstNumberIndex(input);
+		let course = [input.substring(0, index), input.substring(index)];
+		ajaxRequestSubject(course[0], course[1], term);
+	}
+	else {
+		ajaxRequestSubject("default", "default", term);
 	}
 }
 
@@ -228,12 +325,11 @@ function firstNumberIndex(string) {
 
 
 function updateCourseInfo(json) {
-	//alert(json.title);
 	$("#title").html(`<span>Course:</span> ${json.subject} ${json.catalog_number}: ${json.title}`);
 	$("#description").html(`<span>Description:</span> ${json.description}`);
-	$("#antirequisites").html(`<span>Antirequisites:</span> ${json.antirequisites}`);
-	$("#corequisites").html(`<span>Corequisites:</span> ${json.corequisites}`);
-	$("#prerequisites").html(`<span>Prerequisites:</span> ${json.prerequisites}`);
+	$("#antirequisites").html(`<span>Antirequisites:</span> ${nullCheck(json.antirequisites, "None")}`);
+	$("#corequisites").html(`<span>Corequisites:</span> ${nullCheck(json.corequisites, "None")}`);
+	$("#prerequisites").html(`<span>Prerequisites:</span> ${nullCheck(json.prerequisites, "None")}`);
 	$("#links").html(
 		`<span>Links:</span> <a href=${json.url} target="_blank">UWCalender</a>
 		<a href=https://uwflow.com/course/${json.subject.toLowerCase()}${json.catalog_number.toLowerCase()} target="_blank">UWflow</a>`);
@@ -249,4 +345,5 @@ function clearCourseInfo() {
 	$("#prerequisites").html("");
 	$("#links").html("");
 	$("#scheduleTable").html("");
+	$("#examTable").html("");
 }

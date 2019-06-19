@@ -73,20 +73,20 @@ table:empty {
 	border: none;
 }
 
-#scheduleTable p {
+#infoTables p {
 	font-weight: bold;
 	margin-block-end: 0.5em;
 }
 
-#scheduleTable div {
+#infoTables div {
 	margin-bottom: 17px;
 }
 
-#scheduleTable div:last-child {
+#infoTables div:last-child {
 	margin-bottom: 0;
 }
 
-#scheduleTable th, td {
+#infoTables th, td {
 	padding: 2px 8px;
 }
 
