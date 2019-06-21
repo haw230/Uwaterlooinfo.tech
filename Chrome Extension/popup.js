@@ -5,7 +5,7 @@ function ajaxRequestSubject(subject, number, terms) {
 		dataType: "json",
 		data: {key: "043f31a8bada20f13b879fea1e64af16"},
 		success: function(result) {
-			clearCourseInfo();;
+			clearCourseInfo();
 
 			if (jQuery.isEmptyObject(result.data)) {
 				console.log("Invalid course code");
@@ -46,6 +46,7 @@ function ajaxCall(url, onSuccess = (x) => x) {
 		dataType: "json",
 		data: {key: "043f31a8bada20f13b879fea1e64af16"},
 		success: function(result) {
+			console.log(result);
 			onSuccess(result.data);
 		},
 		error: function(xhr, status, error) {
@@ -124,12 +125,18 @@ function parseCourseSchedule(data) {
 }
 
 
+function sectionType(section) {
+	let name = section.split(" ");
+	return name[0];
+}
+
+
 function renderCourseSchedule(schedule) {
 	let columns = schedule.length;
 
 	let table = `<div><table>`;
 	table += 
-	`<tr>
+	`<tr class="table-caption">
 		<th>Section</th>
 		<th>Class</th>
 		<th>Campus</th>
@@ -143,7 +150,7 @@ function renderCourseSchedule(schedule) {
 	for (let i = 0; i < columns; i++) {
 		table +=
 		`<tr>
-		<td>${nullCheck(schedule[i].section, "N/A")}</td>
+		<td class="${sectionType(schedule[i].section)}">${nullCheck(schedule[i].section, "N/A")}</td>
 		<td>${nullCheck(schedule[i].class, "N/A")}</td>
 		<td>${nullCheck(schedule[i].campus, "N/A")}</td>
 		<td>${nullCheck(schedule[i].enrollment, "N/A")}</td>
@@ -179,7 +186,6 @@ function renderCourseSchedule(schedule) {
 
 
 function parseExamSchedule(data) {
-	console.log(data);
 	if (!jQuery.isEmptyObject(data) && !data.sections[0].section.includes("Online")) {
 		let time = JSON.parse(JSON.stringify(data.sections[0]));
 
@@ -201,7 +207,7 @@ function parseExamSchedule(data) {
 function renderExamSchedule(data) {
 	let table = `<p>Final Exam</p><div><table>`;
 	table += 
-	`<tr>
+	`<tr class="table-caption">
 		<th>Section(s)</th>
 		<th>Date</th>
 		<th>Time</th>
@@ -209,7 +215,7 @@ function renderExamSchedule(data) {
 	</tr>`;
 	table +=
 	`<tr>
-		<td>${data.section}</td>
+		<td class="EXAM">${data.section}</td>
 		<td>${data.date} (${data.day})</td>
 		<td>${data.start_time} - ${data.end_time}</td>
 		<td>${data.location}</td>
@@ -333,6 +339,9 @@ function updateCourseInfo(json) {
 	$("#links").html(
 		`<span>Links:</span> <a href=${json.url} target="_blank">UWCalender</a>
 		<a href=https://uwflow.com/course/${json.subject.toLowerCase()}${json.catalog_number.toLowerCase()} target="_blank">UWflow</a>`);
+	$("#notes").html(
+		`<span>Note:</span> All data is retrivied using the University of Waterloo's
+		<a href='https://github.com/uwaterloo/api-documentation#accessing-the-api' target="_blank">Open Data API</a>.`);
 }
 
 
@@ -346,4 +355,5 @@ function clearCourseInfo() {
 	$("#links").html("");
 	$("#scheduleTable").html("");
 	$("#examTable").html("");
+	$("#notes").html("");
 }

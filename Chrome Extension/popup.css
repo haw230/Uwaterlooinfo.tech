@@ -37,6 +37,10 @@
 	border-color: #000000;
 }
 
+#searchArea #searchBox:hover {
+	border-color: #000000;
+}
+
 #searchArea #searchButton {
 	border-radius: 3px;
 	box-shadow: none;
@@ -62,11 +66,12 @@ input, button {
 }
 
 table {
-	border: 1px solid black;
+	border: 1px solid #A9A9A9;
 	border-collapse: collapse;
 	display: block;
 	overflow-x: auto;
 	white-space: nowrap;
+	border-radius: 5px 5px 0 0;
 }
 
 table:empty {
@@ -90,23 +95,62 @@ table:empty {
 	padding: 2px 8px;
 }
 
+#infoTables tr {
+	border-top: 1px solid #ddd;
+}
+
+#infoTables tr:first-child {
+	border-top: none;
+}
+
 /* width */
 ::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
+	width: 6px;
+	height: 6px;
+	overflow: hidden;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
 	background: #f1f1f1;
+	overflow: hidden;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
- 	background: #A9A9A9; 
+ 	background: #A9A9A9;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 	background: #989898;
+}
+
+.table-caption {
+	background-color: #f8f8ff;
+}
+
+.LEC {
+	background-color: #f7fcfe;
+	border-left: 4px solid #b2d0dd;
+}
+
+.TUT {
+	background-color: #f9fcf9;
+	border-left: 4px solid #bfd2bf;
+}
+
+.TST {
+	background-color: #fffcf8;
+	border-left: 4px solid #e2ceb2;
+}
+
+.LAB {
+	background-color: #fcf8f8;
+	border-left: 4px solid #d0b8b7;
+}
+
+.EXAM {
+	background-color: #f9f9f9;
+	border-left: 4px solid #d0d0d0;
 }
