@@ -22,6 +22,9 @@
 
 #searchArea {
 	margin-top: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 #searchArea #searchBox {
@@ -31,6 +34,45 @@
 	border-color: #A9A9A9;
 	border-style: solid;
 	transition: 0.7s;
+	height: 21px;
+	z-index: 1;
+}
+
+#autocomplete {
+	width: 173px;
+	top: 21px;
+	position: absolute;
+	overflow-y: scroll;
+	border: 1px solid #ddd;
+	border-top: 0;
+}
+
+#autocomplete:empty {
+	border: 0;
+}
+
+.suggestion {
+	height: 21px;
+	border-top: 1px solid #ddd;
+	background-color: white;
+	text-align: left;
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.suggestion:first-child {
+	border-top: 0;
+}
+
+.suggestion:hover {
+	background-color: #fdfdfd;
+}
+
+#searchArea #search-field {
+	display: flex;
+	width: 60%;
+	flex-wrap: wrap;
+	position: relative;
 }
 
 #searchArea #searchBox:focus {
@@ -49,6 +91,7 @@
 	border-style: solid;
 	transition: 1s;
 	background-color: #b3b3ff;
+	height: 21px;
 }
 
 #searchArea #searchButton:hover {

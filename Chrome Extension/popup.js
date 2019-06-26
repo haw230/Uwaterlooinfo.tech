@@ -29,6 +29,7 @@ function ajaxRequestSubject(subject, number, terms) {
 				});
 				updateCourseInfo(result.data);
 			}
+			autoComplete($("#searchBox").val());
 		},
 		error: function(xhr, status, error) {
 			console.log("error");
@@ -46,7 +47,6 @@ function ajaxCall(url, onSuccess = (x) => x) {
 		dataType: "json",
 		data: {key: "043f31a8bada20f13b879fea1e64af16"},
 		success: function(result) {
-			console.log(result);
 			onSuccess(result.data);
 		},
 		error: function(xhr, status, error) {
@@ -292,17 +292,43 @@ function nullCheck(string, returnValue) {
 
 $(document).ready(function() {
 
-	$("#searchButton").bind("click", function() {
+	$("#searchButton").click(function() {
 		if ($("#searchBox").val() !== undefined) {
 			ajaxCall(`https://api.uwaterloo.ca/v2/terms/list.json`, currentTerm);
 		}
 	});
 
+	$("#searchBox").focus(function() {
+		let value = $("#searchBox").val();
+		if (value !== undefined) {
+			autoComplete(value);
+		}
+	});
+
+	$("#autocomplete").on("click", ".suggestion", function() {
+		let value = $(this).text();
+		$("#searchBox").val(value);
+		autoComplete(value);
+	});
+
+	$("#searchBox").blur(function() {
+		//$("#autocomplete").html("");
+	});
+
 	$(document).on('keypress',function(e) {
-		if (e.which == 13 && $("#searchBox").val() !== undefined) {
+		let value = $("#searchBox").val();
+		if (e.which == 13 && value !== undefined) {
 			ajaxCall(`https://api.uwaterloo.ca/v2/terms/list.json`, currentTerm);
 		}
 	});
+
+	$("#searchBox").on("input", function() {
+		let value = $("#searchBox").val();
+		if (value !== undefined) {
+			autoComplete(value);
+		}
+	});
+
 })
 
 
@@ -332,7 +358,7 @@ function firstNumberIndex(string) {
 
 function updateCourseInfo(json) {
 	$("#title").html(`<span>Course:</span> ${json.subject} ${json.catalog_number}: ${json.title}`);
-	$("#description").html(`<span>Description:</span> ${json.description}`);
+	$("#description").html(`<span>Description:</span> ${nullCheck(json.description, "None")}`);
 	$("#antirequisites").html(`<span>Antirequisites:</span> ${nullCheck(json.antirequisites, "None")}`);
 	$("#corequisites").html(`<span>Corequisites:</span> ${nullCheck(json.corequisites, "None")}`);
 	$("#prerequisites").html(`<span>Prerequisites:</span> ${nullCheck(json.prerequisites, "None")}`);
@@ -357,3 +383,37 @@ function clearCourseInfo() {
 	$("#examTable").html("");
 	$("#notes").html("");
 }
+
+
+function autoComplete(search) {
+	$("#autocomplete").html("");
+	if (search !== "") {
+		let allTerms =
+		["Math135", "Math136", "Math137", "Math138", "Math235", "Math237", "Phys121", "Econ101", "Phys122"];
+		search = search.toLowerCase();
+		let possibleTerms = allTerms.filter(x => (x.toLowerCase().includes(search)));
+		let length = possibleTerms.length;
+		let html = "";
+
+		let windowHeight = $(window).height();
+		let bottom = $("#search-field")[0].getBoundingClientRect().bottom + $(window)['scrollTop']();;
+		//let maxItemsShown = Math.floor((windowHeight - bottom) / 23);
+
+		//let iteration = Math.min(length, maxItemsShown);
+		for (let i = 0; i < length; i++) {
+			html += `<div class="suggestion">${possibleTerms[i]}</div>`;
+		}
+		$("#autocomplete").css("max-height", windowHeight - bottom - 10);
+		$("#autocomplete").html(html);
+		//console.log(windowHeight);
+		//console.log(maxItemsShown);
+
+		//let leftPos  = $("#autocomplete")[0].getBoundingClientRect().left   + $(window)['scrollLeft']();
+		//let rightPos = $("#autocomplete")[0].getBoundingClientRect().right  + $(window)['scrollLeft']();
+		//let topPos   = $("#autocomplete")[0].getBoundingClientRect().top    + $(window)['scrollTop']();
+		//let bottomPos= $("#autocomplete")[0].getBoundingClientRect().bottom + $(window)['scrollTop']();
+	}
+}
+
+//ajaxCall("https://api.uwaterloo.ca/v2/courses.json", console.log);
+
