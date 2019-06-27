@@ -4,7 +4,7 @@ import requests
 # api-endpoint 
 URL = "https://api.uwaterloo.ca/v2/courses.json"
   
-# location given here 
+# api key given here 
 key = "043f31a8bada20f13b879fea1e64af16"
   
 # defining a params dict for the parameters to be sent to the API 
