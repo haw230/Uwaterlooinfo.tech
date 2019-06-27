@@ -1,7 +1,7 @@
 #popup {
 	width:300px;
 	text-align:center;
-	margin: 10px 10px 25px 10px;
+	margin: 25px 10px;
 }
 
 #logo {
@@ -203,7 +203,57 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 	border-left: 4px solid #d0b8b7;
 }
 
+.SEM {
+	background-color: #fff8f8;
+	border-left: 4px solid #eac5c5;
+}
+
 .EXAM {
 	background-color: #f9f9f9;
 	border-left: 4px solid #d0d0d0;
+}
+
+header {
+	margin: -8px;
+}
+
+#navbar {
+	/*height: 20px;*/
+	background-color: black;
+}
+
+#navfooter {
+	display: flex;
+}
+
+#navfooter div {
+	height: 5px;
+	width: 25%;
+}
+
+#navfooter div:nth-child(1) {
+	background-color: #FFFFAA;
+}
+
+#navfooter div:nth-child(2) {
+	background-color: #FFEA3D;
+}
+
+#navfooter div:nth-child(3) {
+	background-color: #FFD54F;
+}
+
+#navfooter div:nth-child(4) {
+	background-color: #E4B429;
+}
+
+#navbar img {
+	height: 40px;
+	width: auto;
+	padding: 5px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "BureauGrotCond Book", impact, "avenir next condensed heavy", "Droid Sans", sans-serif;
+	font-weight: normal;
 }
