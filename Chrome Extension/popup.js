@@ -3,7 +3,7 @@ function ajaxRequestSubject(subject, number, terms) {
 		type: "GET",
 		url: `https://api.uwaterloo.ca/v2/courses/${subject}/${number}.json`,
 		dataType: "json",
-		data: {key: "043f31a8bada20f13b879fea1e64af16"},
+		data: {key: apiKey},
 		success: function(result) {
 
 			if (jQuery.isEmptyObject(result.data)) {
@@ -49,7 +49,7 @@ function ajaxCall(url, onSuccess = (x) => x) {
 		type: "GET",
 		url: url,
 		dataType: "json",
-		data: {key: "043f31a8bada20f13b879fea1e64af16"},
+		data: {key: apiKey},
 		success: function(result) {
 			onSuccess(result.data);
 		},
@@ -162,7 +162,7 @@ function renderCourseSchedule(schedule) {
 
 		let classes = schedule[i].date.length;
 		for (let j = 1; j < classes; j++) {
-			table += `</br>${nullCheck(schedule[i].date[j][0], "N/A")} - ${nullCheck(schedule[i].date[j][1], "N/A")}`;
+			table += `</br>${nullCheck(schedule[i].date[j][1], "N/A")} - ${nullCheck(schedule[i].date[j][0], "N/A")}`;
 		}
 		table += `</td>`;
 
@@ -251,6 +251,7 @@ function getDay(day) {
 	}
 }
 
+
 function getMonth(month) {
 	switch(parseInt(month)) {
 		case 1:
@@ -281,6 +282,7 @@ function getMonth(month) {
 			return null;
 	}
 }
+
 
 function nullCheck(string, returnValue) {
 	string = `${string}`
@@ -346,9 +348,11 @@ $(document).ready(function() {
 
 })
 
+
 function addLoader() {
 	$(".loader").css("display", "block");
 }
+
 
 function delLoader() {
 	$(".loader").css("display", "none");
@@ -358,7 +362,7 @@ function delLoader() {
 function searchCourse(term) {
 	let input = $("#searchBox").val().replace(/ /g, '').replace(/[^\w\s]/gi, '');
 
-	if (input.length > 0) {
+	if (input.length > 0 && !(/^\d+$/.test(input))) {
 		let index = firstNumberIndex(input);
 		let course = [input.substring(0, index), input.substring(index)];
 		ajaxRequestSubject(course[0], course[1], term);
@@ -435,11 +439,13 @@ function autoComplete(search) {
 	}
 }
 
+
 function setMaxHeight() {
 	let windowHeight = $(window).height();
 	let bottom = $("#search-field")[0].getBoundingClientRect().bottom + $(window)['scrollTop']();
 	$("#autocomplete").css("max-height", windowHeight - bottom - 10);
 }
+
 
 function updateAutoComplete() {
 	let value = $("#searchBox").val();
@@ -462,14 +468,24 @@ function includesFirst(compare, string) {
 
 
 function retriveAllCourses() {
-	jQuery.get('courses.txt', function (data) {
+	jQuery.get('courses.txt', function(data) {
     	courses = data.split("\n");
 	});
 }
 
 
-// global variable to fetch all course codes
+function retriveApiKey() {
+	jQuery.get('apikey.txt', function(data) {
+		apiKey = data;
+	});
+}
+
+
+// global variables
 var courses;
+var apiKey;
+
 window.onload = function() {
   retriveAllCourses();
+  retriveApiKey();
 }
