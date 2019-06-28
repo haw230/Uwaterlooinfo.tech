@@ -10,10 +10,11 @@
 	<!-- CSS file -->
 	<link rel="stylesheet" type="text/css" href="popup.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <header>
-	<div id="navbar">
+	<div id="navbar" class="noselect">
 		<img id="logo" src="UniversityOfWaterlooReverse.png" />
 	</div>
 	<div id="navfooter">
@@ -34,8 +35,11 @@
 			</div>
 			<button id="searchButton"><i class="fas fa-arrow-right"></i></button>
 		</div>
+		<div id="error">
+			<h3>Invalid course code</h3>
+		</div>
+		<div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i>Loading</div>
 		<div id="courseInfo">
-			<h3 id="error"></h3>
 			<p id="title"></p>
 			<p id="description"></p>
 			<p id="antirequisites"></p>
@@ -47,7 +51,9 @@
 			</div>
 			<p id="links"></p>
 			<p id="notes"></p>
-			<p id="disclaimer">
+		</div>
+		<div id="disclaimer">
+			<p>
 				<span>Disclaimer:</span>
 				This chrome extension is not affiliated with the University of Waterloo in any way.
 			</p>

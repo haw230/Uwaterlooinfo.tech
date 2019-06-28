@@ -18,7 +18,7 @@ result = r.json()
 courses = [];
 
 for i in result["data"]:
-    courses.append(str(i["subject"]) + str(i["catalog_number"] + "\n"))
+    courses.append(str(i["subject"]) + str(i["catalog_number"] + " " + str(i["title"]) + "\n"))
 
 courses.sort()
 f = open('courses.txt','w')
