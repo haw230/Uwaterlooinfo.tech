@@ -1,23 +1,12 @@
 {
 	"manifest_version": 2,
-	"name": "UW Course Information Finder",
-	"description": "Used for finding information on existing courses at the University of Waterloo",
-	"version": "0.1",
+	"name": "UWaterloo Course Info Finder",
+	"description": "Used for finding information on courses at the University of Waterloo",
+	"version": "0.0.2",
 	"permissions": ["https://api.uwaterloo.ca/v2/*"],
-	/*"background": {
-    	"scripts": ["background.js"],
-    	"persistant": false
-	},*/
-	/*"content_scripts": [
-		{
-		"matches": ["<all_urls>"],
-		"css": [],
-		"js": ["jquery-3.4.1.js", "content.js", "popup.js"]
-		}
-	],*/
 	"browser_action": {
-		"default_icon": "icon.png",
+		"default_icon": "icon-small.png",
 		"default_popup": "popup.html",
-		"default_title": "UW Course Information Finder"
+		"default_title": "UWaterloo Course Info Finder"
 	}
 }
