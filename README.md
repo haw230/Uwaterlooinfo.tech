@@ -1,1 +1,1 @@
-# Chrome-Extension
+# UWaterloo Course Info Finder
