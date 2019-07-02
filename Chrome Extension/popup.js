@@ -237,9 +237,12 @@ function formatDate(date) {
 
 
 function getDay(day) {
-	let lastChar = day[day.length - 1];
+	let lastChar = parseInt(day[day.length - 1]);
 	day = parseInt(day);
-	switch(day) {
+	if (4 <= day && day <= 20) {
+		return `${day}th`;
+	}
+	switch(lastChar) {
 		case 1:
 			return `${day}st`;
 		case 2:
