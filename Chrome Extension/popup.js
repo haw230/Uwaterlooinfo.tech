@@ -101,7 +101,7 @@ function parseCourseSchedule(data) {
 		for (let j = 0; j < classes; j++) {
 			let dates = data[i].classes[j].date;
 			let location = data[i].classes[j].location;
-			time.push([dates.start_time, dates.end_time, dates.weekdays, `${location.building} ${location.room}`]);
+			time.push([dates.start_time, dates.end_time, dates.weekdays, dates.start_date, `${location.building} ${location.room}`]);
 		}
 
 		let instructors = [];
@@ -160,24 +160,35 @@ function renderCourseSchedule(schedule) {
 		<td>${nullCheck(schedule[i].enrollment, "N/A")}</td>
 		<td>${nullCheck(schedule[i].date[0][0], "N/A")} - ${nullCheck(schedule[i].date[0][1], "N/A")}`
 
+		// Time
 		let classes = schedule[i].date.length;
 		for (let j = 1; j < classes; j++) {
 			table += `</br>${nullCheck(schedule[i].date[j][0], "N/A")} - ${nullCheck(schedule[i].date[j][1], "N/A")}`;
 		}
 		table += `</td>`;
 
+		// Days
 		table += `<td>${nullCheck(schedule[i].date[0][2], "N/A")}`
+		if (schedule[i].date[0][3] !== null) {
+			table += ` (${nullCheck(formatDate('0/' + schedule[i].date[0][3], "/"), "")})`
+		}
 		for (let j = 1; j < classes; j++) {
 			table += `</br>${nullCheck(schedule[i].date[j][2], "N/A")}`;
+
+			if (schedule[i].date[j][3] !== null) {
+				table += ` (${nullCheck(formatDate('0/' + schedule[i].date[j][3], "/"), "")})`
+			}
 		}
 		table += `</td>`;
 
-		table += `<td>${nullCheck(schedule[i].date[0][3], "N/A")}`
+		// Location
+		table += `<td>${nullCheck(schedule[i].date[0][4], "N/A")}`
 		for (let j = 1; j < classes; j++) {
-			table += `</br>${nullCheck(schedule[i].date[j][3], "N/A")}`;
+			table += `</br>${nullCheck(schedule[i].date[j][4], "N/A")}`;
 		}
 		table += `</td>`;
 
+		// Instructor(s)
 		table += `<td>${nullCheck(schedule[i].instructors[0], "N/A")}`
 		for (let j = 1; j < classes; j++) {
 			table += `</br>${nullCheck(schedule[i].instructors[j], "N/A")}`;
@@ -202,7 +213,7 @@ function parseExamSchedule(data) {
 			}
 		}
 		time.section = sections;
-		time.date = formatDate(time.date);
+		time.date = formatDate(time.date, "-");
 		renderExamSchedule(time);
 	}
 }
@@ -228,8 +239,12 @@ function renderExamSchedule(data) {
 }
 
 
-function formatDate(date) {
-	let dateArray = date.split("-");
+// format must be year-month-day
+function formatDate(date, seperator) {
+	let dateArray = date.split(seperator);
+	if (dateArray.includes("null")) {
+		return null;
+	}
 	let month = dateArray[1];
 	let day = dateArray[2];
 	return `${getMonth(month)} ${getDay(day)}`
