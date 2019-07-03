@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "UWaterloo Course Info Finder",
 	"description": "Used for finding information for courses at the University of Waterloo",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"permissions": ["https://api.uwaterloo.ca/v2/*"],
 	"browser_action": {
 		"default_icon": "icon-small.png",

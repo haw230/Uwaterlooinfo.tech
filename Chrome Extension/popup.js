@@ -162,7 +162,7 @@ function renderCourseSchedule(schedule) {
 
 		let classes = schedule[i].date.length;
 		for (let j = 1; j < classes; j++) {
-			table += `</br>${nullCheck(schedule[i].date[j][1], "N/A")} - ${nullCheck(schedule[i].date[j][0], "N/A")}`;
+			table += `</br>${nullCheck(schedule[i].date[j][0], "N/A")} - ${nullCheck(schedule[i].date[j][1], "N/A")}`;
 		}
 		table += `</td>`;
 
@@ -325,7 +325,7 @@ $(document).ready(function() {
 		$("#autocomplete").css("display", "none");
 	});
 
-	$(document).on('keypress',function(e) {
+	$(document).on('keypress', function(e) {
 		let value = $("#searchBox").val();
 		if (e.which == 13 && value !== undefined) {
 			clearCourseInfo();
