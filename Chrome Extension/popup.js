@@ -140,7 +140,7 @@ function renderCourseSchedule(schedule) {
 
 	let table = `<div><table>`;
 	table += 
-	`<tr class="table-caption">
+	`<thead><tr class="table-caption">
 		<th>Section</th>
 		<th>Class</th>
 		<th>Campus</th>
@@ -149,7 +149,7 @@ function renderCourseSchedule(schedule) {
 		<th>Day(s)</th>
 		<th>Location</th>
 		<th>Instructor(s)</th>
-	</tr>`;
+	</tr></thead>`;
 
 	for (let i = 0; i < columns; i++) {
 		table +=
@@ -222,12 +222,12 @@ function parseExamSchedule(data) {
 function renderExamSchedule(data) {
 	let table = `<p>Final Exam</p><div><table>`;
 	table += 
-	`<tr class="table-caption">
+	`<thead><tr class="table-caption">
 		<th>Section(s)</th>
 		<th>Date</th>
 		<th>Time</th>
 		<th>Location</th>
-	</tr>`;
+	</tr></thead>`;
 	table +=
 	`<tr>
 		<td class="EXAM">${data.section}</td>

@@ -136,10 +136,18 @@ table {
 	overflow-x: auto;
 	white-space: nowrap;
 	border-radius: 5px 5px 0 0;
+	max-height: 500px;
 }
 
 table:empty {
 	border: none;
+}
+
+thead th {
+	position: sticky;
+	top: 0;
+	background-color: #f8f8ff;
+	box-shadow: 1px 1px 0 #ddd
 }
 
 #infoTables p {
@@ -163,9 +171,14 @@ table:empty {
 	border-top: 1px solid #ddd;
 }
 
-#infoTables tr:first-child {
+#infoTables .table-caption:first-child {
 	border-top: none;
 }
+
+.table-caption {
+	background-color: #f8f8ff;
+}
+
 
 /* width */
 ::-webkit-scrollbar {
@@ -203,10 +216,6 @@ input[type="search"]::-webkit-search-results-decoration { display: none; }
 input[type="search"] {
 	font-size: 14px;
 	width: 100%;
-}
-
-.table-caption {
-	background-color: #f8f8ff;
 }
 
 .LEC {
