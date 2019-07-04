@@ -31,6 +31,11 @@ function ajaxRequestSubject(subject, number, terms) {
 					});
 					updateCourseInfo(result.data);
 					$("#courseInfo").css("display", "block");
+					$("#scheduleTable table").each(function(index) {
+						if ($(this).css("max-height") === `${$(this).innerHeight()}px`) {
+							$(this).css("border-radius", "5px 0 0 0");
+						}
+					});
 					updateAutoComplete();
 				});
 			}
@@ -139,17 +144,32 @@ function renderCourseSchedule(schedule) {
 	let columns = schedule.length;
 
 	let table = `<div><table>`;
-	table += 
-	`<thead><tr class="table-caption">
-		<th>Section</th>
-		<th>Class</th>
-		<th>Campus</th>
-		<th>Enrolled</th>
-		<th>Time</th>
-		<th>Day(s)</th>
-		<th>Location</th>
-		<th>Instructor(s)</th>
-	</tr></thead>`;
+	if (columns === 0) {
+		table += 
+		`<thead><tr class="table-caption">
+			<th class="no-shadow">Section</th>
+			<th class="no-shadow">Class</th>
+			<th class="no-shadow">Campus</th>
+			<th class="no-shadow">Enrolled</th>
+			<th class="no-shadow">Time</th>
+			<th class="no-shadow">Day(s)</th>
+			<th class="no-shadow">Location</th>
+			<th class="no-shadow">Instructor(s)</th>
+		</tr></thead>`;
+	}
+	else {
+		table += 
+		`<thead><tr class="table-caption">
+			<th>Section</th>
+			<th>Class</th>
+			<th>Campus</th>
+			<th>Enrolled</th>
+			<th>Time</th>
+			<th>Day(s)</th>
+			<th>Location</th>
+			<th>Instructor(s)</th>
+		</tr></thead>`;
+	}
 
 	for (let i = 0; i < columns; i++) {
 		table +=
@@ -364,6 +384,11 @@ $(document).ready(function() {
 	    }
 	});
 
+	$("#open-tab-view").click(function() {
+		window.open('popup-tabview.html', '_blank');
+		$(this).css("display", "none");
+	});
+
 })
 
 
@@ -383,7 +408,15 @@ function searchCourse(term) {
 	if (input.length > 0 && !(/^\d+$/.test(input))) {
 		let index = firstNumberIndex(input);
 		let course = [input.substring(0, index), input.substring(index)];
-		ajaxRequestSubject(course[0], course[1], term);
+		if (course[0] == "" || course[1] == "") {
+			delLoader();
+			console.log("Invalid course code");
+			$("#error").css("display", "block");
+			updateAutoComplete();
+		}
+		else {
+			ajaxRequestSubject(course[0], course[1], term);
+		}
 	}
 	else {
 		ajaxRequestSubject("default", "default", term);
