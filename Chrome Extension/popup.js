@@ -1,3 +1,4 @@
+// main ajax request function that chains all other functions together
 function ajaxRequestSubject(subject, number, terms) {
 	$.ajax({
 		type: "GET",
@@ -49,6 +50,7 @@ function ajaxRequestSubject(subject, number, terms) {
 }
 
 
+// general ajax call
 function ajaxCall(url, onSuccess = (x) => x) {
 	return $.ajax({
 		type: "GET",
@@ -67,6 +69,7 @@ function ajaxCall(url, onSuccess = (x) => x) {
 }
 
 
+// parses out the current term and next term
 function currentTerm(data) {
 	let terms = concatJsonObjectContent(data.listings)
 	let current = data.current_term;
@@ -75,6 +78,7 @@ function currentTerm(data) {
 }
 
 
+// concatenates all values in an json object into a list
 function concatJsonObjectContent(obj) {
 	let list = [];
 	Object.keys(obj).forEach(function(key) {
@@ -84,6 +88,7 @@ function concatJsonObjectContent(obj) {
 }
 
 
+// gets the actual name of the term
 function termName(array, term) {
 	let name = "";
 	array.forEach(function(obj) {
@@ -95,6 +100,7 @@ function termName(array, term) {
 }
 
 
+// main function that parses the course schedule
 function parseCourseSchedule(data) {
 	let sections = data.length;
 	let schedule = [];
@@ -134,12 +140,14 @@ function parseCourseSchedule(data) {
 }
 
 
+// gets the type of a section (TUT, LEC, etc.)
 function sectionType(section) {
 	let name = section.split(" ");
 	return name[0];
 }
 
 
+// adds the course schedule table to the html
 function renderCourseSchedule(schedule) {
 	let columns = schedule.length;
 
@@ -220,6 +228,7 @@ function renderCourseSchedule(schedule) {
 }
 
 
+// main function that parses the exam schedule
 function parseExamSchedule(data) {
 	if (!jQuery.isEmptyObject(data) && !data.sections[0].section.includes("Online")) {
 		let time = JSON.parse(JSON.stringify(data.sections[0]));
@@ -239,6 +248,7 @@ function parseExamSchedule(data) {
 }
 
 
+// adds the exam schedule table to the html
 function renderExamSchedule(data) {
 	let table = `<p>Final Exam</p><div><div class="overflow-container"><table>`;
 	table += 
@@ -259,7 +269,7 @@ function renderExamSchedule(data) {
 }
 
 
-// format must be year-month-day
+// converts date into its english name (format must be year-month-day)
 function formatDate(date, seperator) {
 	let dateArray = date.split(seperator);
 	if (dateArray.includes("null")) {
@@ -271,6 +281,7 @@ function formatDate(date, seperator) {
 }
 
 
+// gets the day in english
 function getDay(day) {
 	let lastChar = parseInt(day[day.length - 1]);
 	day = parseInt(day);
@@ -290,6 +301,7 @@ function getDay(day) {
 }
 
 
+// gets the month in english
 function getMonth(month) {
 	switch(parseInt(month)) {
 		case 1:
@@ -322,6 +334,7 @@ function getMonth(month) {
 }
 
 
+// checks if a string is null
 function nullCheck(string, returnValue) {
 	string = `${string}`
 
@@ -334,6 +347,7 @@ function nullCheck(string, returnValue) {
 }
 
 
+// document event bindings
 $(document).ready(function() {
 
 	$("#searchButton").click(function() {
@@ -392,16 +406,19 @@ $(document).ready(function() {
 })
 
 
+// adds the loading icon to the html
 function addLoader() {
 	$(".loader").css("display", "block");
 }
 
 
+// remove the loading icon from the html
 function delLoader() {
 	$(".loader").css("display", "none");
 }
 
 
+// retrives and displays all course info given the terms
 function searchCourse(term) {
 	let input = $("#searchBox").val().replace(/ /g, '').replace(/[^\w\s]/gi, '');
 
@@ -424,6 +441,7 @@ function searchCourse(term) {
 }
 
 
+// gets the index of the first number in a string
 function firstNumberIndex(string) {
 	let length = string.length;
 	for (let i = 0; i < length; i++) {
@@ -434,6 +452,7 @@ function firstNumberIndex(string) {
 }
 
 
+// updates course info in html aside from course and exam schedule
 function updateCourseInfo(json) {
 	$("#title").html(`<span>Course:</span> ${json.subject} ${json.catalog_number}: ${json.title}`);
 	$("#description").html(`<span>Description:</span> ${nullCheck(json.description, "None")}`);
@@ -449,6 +468,7 @@ function updateCourseInfo(json) {
 }
 
 
+// clears all course info from html
 function clearCourseInfo() {
 	$("#error").css("display", "none");
 	$("#courseInfo").css("display", "none");
@@ -464,6 +484,7 @@ function clearCourseInfo() {
 }
 
 
+// autocomplete suggestion box for searching courses
 function autoComplete(search) {
 	if ($("#searchBox").is(":focus")) {
 		$("#autocomplete").html("");
@@ -491,6 +512,7 @@ function autoComplete(search) {
 }
 
 
+// sets the max height of autocomplete without it going off screen
 function setMaxHeight() {
 	let windowHeight = $(window).height();
 	let bottom = $("#search-field")[0].getBoundingClientRect().bottom + $(window)['scrollTop']();
@@ -498,6 +520,7 @@ function setMaxHeight() {
 }
 
 
+// updates the autocomplete suggestions
 function updateAutoComplete() {
 	let value = $("#searchBox").val();
 	if (value !== undefined) {
@@ -506,6 +529,7 @@ function updateAutoComplete() {
 }
 
 
+// check if a a string is a substring for the first few characters
 function includesFirst(compare, string) {
 	let compareLength = compare.length;
 
@@ -518,6 +542,7 @@ function includesFirst(compare, string) {
 }
 
 
+// gets all course names from text file
 function retriveAllCourses() {
 	jQuery.get('courses.txt', function(data) {
     	courses = data.split("\n");
@@ -525,6 +550,7 @@ function retriveAllCourses() {
 }
 
 
+// gets the api key
 function retriveApiKey() {
 	jQuery.get('apikey.txt', function(data) {
 		apiKey = data;
