@@ -118,7 +118,7 @@
 	transition: 1s;
 	background-color: #b3b3ff;
 	height: 22px;
-	margin-left: 2%;
+	margin-left: 7px;
 }
 
 #searchArea #searchButton:hover {
@@ -192,14 +192,6 @@ thead th {
 
 .table-caption {
 	background-color: #f8f8ff;
-}
-
-
-/* width */
-::-webkit-scrollbar {
-	width: 6px;
-	height: 6px;
-	overflow: hidden;
 }
 
 /* Track */
@@ -316,6 +308,10 @@ input[type="search"] {
 h1, h2, h3, h4, h5, h6 {
 	font-family: "BureauGrotCond Book", impact, "avenir next condensed heavy", "Droid Sans", sans-serif;
 	font-weight: normal;
+}
+
+h1 {
+	font-size: 3em;
 }
 
 .noselect {

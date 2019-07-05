@@ -70,6 +70,8 @@
 	cursor: pointer;
 	transition: 0.2s;
 	z-index: 2;
+	line-height: 14px;
+	margin: 2px;
 }
 
 .suggestion:first-child {
@@ -112,7 +114,7 @@
 	transition: 1s;
 	background-color: #b3b3ff;
 	height: 22px;
-	margin-left: 2%;
+	margin-left: 7px;
 }
 
 #searchArea #searchButton:hover {
@@ -130,13 +132,10 @@ input, button {
 }
 
 table {
-	border: 1px solid #A9A9A9;
-	border-collapse: collapse;
-	display: block;
-	overflow-x: auto;
+	border-collapse: separate;
 	white-space: nowrap;
 	border-radius: 5px 5px 0 0;
-	max-height: 500px;
+	border-spacing: 0;
 }
 
 table:empty {
@@ -148,6 +147,14 @@ thead th {
 	top: 0;
 	background-color: #f8f8ff;
 	box-shadow: 0 1px 0 #ddd
+}
+
+#infoTables thead th:first-child {
+	border-radius: 5px 0 0 0;
+}
+
+#infoTables thead th:last-child {
+	border-radius: 0 5px 0 0
 }
 
 #infoTables p {
@@ -166,6 +173,7 @@ thead th {
 #infoTables th, #infoTables td {
 	padding: 2px 8px;
 	line-height: 18px;
+	font-size: 13px;
 }
 
 #infoTables td {
@@ -329,6 +337,18 @@ h1, h2, h3, h4, h5, h6 {
 	margin: 25px 20px;
 }
 
+.overflow-container {
+	overflow-x: scroll;
+	border-radius: 5px 5px 0 0;
+	box-shadow: 0 0 0px 1px #A9A9A9;
+	max-height: 500px;
+}
+
 .no-shadow {
 	box-shadow: none;
+}
+
+p {
+	font-size: 13px;
+	line-height: 18px;
 }

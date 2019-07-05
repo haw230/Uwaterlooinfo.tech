@@ -26,12 +26,12 @@ function ajaxRequestSubject(subject, number, terms) {
 					return ajaxCall(restCall3, parseExamSchedule);
 				}).done(function() {
 					delLoader();
-					$("#scheduleTable div").each(function(index) {
+					$("#scheduleTable").children().each(function(index) {
 						$(this).prepend(`<p>${terms[index][1]}</p>`);
 					});
 					updateCourseInfo(result.data);
 					$("#courseInfo").css("display", "block");
-					$("#scheduleTable table").each(function(index) {
+					$(".overflow-container").each(function(index) {
 						if ($(this).css("max-height") === `${$(this).innerHeight()}px`) {
 							$(this).css("border-radius", "5px 0 0 0");
 						}
@@ -143,7 +143,7 @@ function sectionType(section) {
 function renderCourseSchedule(schedule) {
 	let columns = schedule.length;
 
-	let table = `<div><table>`;
+	let table = `<div><div class="overflow-container"><table>`;
 	if (columns === 0) {
 		table += 
 		`<thead><tr class="table-caption">
@@ -215,7 +215,7 @@ function renderCourseSchedule(schedule) {
 		}
 		table += `</td>`;
 	}
-	table += `</table></div>`;
+	table += `</table></div></div>`;
 	$("#scheduleTable").append(table);
 }
 
@@ -240,7 +240,7 @@ function parseExamSchedule(data) {
 
 
 function renderExamSchedule(data) {
-	let table = `<p>Final Exam</p><div><table>`;
+	let table = `<p>Final Exam</p><div><div class="overflow-container"><table>`;
 	table += 
 	`<thead><tr class="table-caption">
 		<th>Section(s)</th>
@@ -254,7 +254,7 @@ function renderExamSchedule(data) {
 		<td>${data.date} (${data.day})</td>
 		<td>${data.start_time} - ${data.end_time}</td>
 		<td>${data.location}</td>
-	</tr></table></div>`
+	</tr></table></div></div>`
 	$("#examTable").append(table);
 }
 
