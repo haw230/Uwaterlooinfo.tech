@@ -25,9 +25,10 @@
 	display: none;
 }
 
-#error h3 {
+#error p {
+	font-size: 13px;
 	font-weight: bold;
-	font-family: Typ1451-Regular, verdana, sans-serif;
+	line-height: 16px;
 }
 
 #searchArea {
@@ -71,7 +72,7 @@
 	transition: 0.2s;
 	z-index: 2;
 	line-height: 14px;
-	margin: 2px;
+	padding: 2px;
 }
 
 .suggestion:first-child {
@@ -326,7 +327,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .loader {
-	margin: 10px;
+	margin: 10px 0;
 	display: none;
 	color: black;
 	font-weight: bold;
