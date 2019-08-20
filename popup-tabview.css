@@ -148,10 +148,18 @@ input, button {
 	outline: none;
 }
 
-.overflow-container {
-	overflow-x: scroll;
-	border-radius: 5px 5px 0 0;
-	box-shadow: 0 0 0 1px #A9A9A9;
+@media (max-width: 1000px) {
+
+	.overflow-container {
+		overflow-x: scroll;
+		border-radius: 5px 5px 0 0;
+		box-shadow: 0 0 0 1px #A9A9A9;
+	}
+
+	table {
+		border: none;
+	}
+
 }
 
 table {
