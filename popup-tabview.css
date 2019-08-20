@@ -47,6 +47,7 @@ body {
 	outline: none;
 	border: none;
 	height: 100%;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 #searchArea #input-box-style {
@@ -145,6 +146,12 @@ body {
 
 input, button {
 	outline: none;
+}
+
+.overflow-container {
+	overflow-x: scroll;
+	border-radius: 5px 5px 0 0;
+	box-shadow: 0 0 0 1px #A9A9A9;
 }
 
 table {
