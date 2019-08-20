@@ -32,11 +32,11 @@ function ajaxRequestSubject(subject, number, terms) {
 					});
 					updateCourseInfo(result.data);
 					$("#courseInfo").css("display", "block");
-					$(".overflow-container").each(function(index) {
+					/*$(".overflow-container").each(function(index) {
 						if ($(this).css("max-height") === `${$(this).innerHeight()}px`) {
 							$(this).css("border-radius", "5px 0 0 0");
 						}
-					});
+					});*/
 					updateAutoComplete();
 				});
 			}
