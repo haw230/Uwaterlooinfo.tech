@@ -163,6 +163,7 @@ table {
 		overflow-x: scroll;
 		border-radius: 5px 5px 0 0;
 		box-shadow: 0 0 0 1px #A9A9A9;
+		max-height: 550px;
 	}
 
 	table {
