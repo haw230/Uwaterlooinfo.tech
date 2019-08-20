@@ -62,7 +62,7 @@ body {
 
 #autocomplete {
 	width: 99%;
-	top: 21px;
+	top: 26px;
 	position: absolute;
 	overflow-y: scroll;
 	border: 1px solid #ddd;
