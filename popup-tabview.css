@@ -148,7 +148,16 @@ input, button {
 	outline: none;
 }
 
-@media (max-width: 1000px) {
+table {
+	border: 1px solid #A9A9A9;
+	border-collapse: separate;
+	white-space: nowrap;
+	border-radius: 5px 5px 0 0;
+	width: 100%;
+	border-spacing: 0;
+}
+
+@media screen and (max-width: 800px) {
 
 	.overflow-container {
 		overflow-x: scroll;
@@ -160,15 +169,6 @@ input, button {
 		border: none;
 	}
 
-}
-
-table {
-	border: 1px solid #A9A9A9;
-	border-collapse: separate;
-	white-space: nowrap;
-	border-radius: 5px 5px 0 0;
-	width: 100%;
-	border-spacing: 0;
 }
 
 table:empty {
