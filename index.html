@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Course Information Finder</title>
+
+	<!-- JS file -->
+	<script type="text/javascript" src="jquery-3.4.1.js"></script>
+	<script type="text/javascript" src="popup.js"></script>
+
+	<!-- CSS file -->
+	<link rel="stylesheet" type="text/css" href="normalize.css">
+	<link rel="stylesheet" type="text/css" href="popup-tabview.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="icon" href="icons/icon-128.png">
+
+</head>
+<header>
+	<div id="navbar" class="noselect">
+		<img id="logo" src="UniversityOfWaterloo.png" />
+		<i id="open-tab-view" title="Open in full tab view" class="fas fa-external-link-alt"></i>
+	</div>
+	<div id="navfooter">
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+</header>
+<body>
+	<div class="margin-container">
+		<div id="popup">
+			<h1>COURSE INFORMATION</h1>
+			<div id="searchArea">
+				<div id="search-field">
+					<input type="search" name="" id="searchBox" placeholder="Input course code..." autofocus>
+					<div id="autocomplete"></div>
+				</div>
+				<button id="searchButton"><i class="fas fa-arrow-right"></i></button>
+			</div>
+			<div id="error">
+				<p>Invalid course code</p>
+			</div>
+			<div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i>Loading</div>
+			<div id="courseInfo">
+				<p id="title"></p>
+				<p id="description"></p>
+				<p id="antirequisites"></p>
+				<p id="corequisites"></p>
+				<p id="prerequisites"></p>
+				<div id="infoTables">
+					<div id="scheduleTable"></div>
+					<div id="examTable"></div>
+				</div>
+				<p id="links"></p>
+				<p id="notes"></p>
+			</div>
+			<div id="disclaimer">
+				<p>
+					<span>Disclaimer:</span>
+					This chrome extension is not affiliated with the University of Waterloo in any way.
+				</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
