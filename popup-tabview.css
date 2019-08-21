@@ -179,7 +179,8 @@ thead th {
 	position: -webkit-sticky;
 	top: 0;
 	background-color: #f8f8ff;
-	box-shadow: 0 1px 0 #ddd
+	box-shadow: 0 1px 0 #ddd;
+	overflow: hidden;
 }
 
 #infoTables p {
@@ -219,6 +220,7 @@ thead th {
 
 .table-caption {
 	background-color: #f8f8ff;
+	overflow: hidden;
 }
 
 /* width */
