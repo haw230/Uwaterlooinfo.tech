@@ -38,6 +38,7 @@ function ajaxRequestSubject(subject, number, terms) {
 						}
 					});*/
 					updateAutoComplete();
+					setTableOverflowScroll();
 				});
 			}
 		},
@@ -398,10 +399,9 @@ $(document).ready(function() {
 	    }
 	});
 
-	$("#open-tab-view").click(function() {
-		window.open('popup-tabview.html', '_blank');
-		$(this).css("display", "none");
-	});
+	$(window).resize(function () {
+		setTableOverflowScroll();
+	})
 
 })
 
@@ -538,6 +538,21 @@ function includesFirst(compare, string) {
 	}
 	else {
 		return false;
+	}
+}
+
+
+// Adds scroll bars to the tables if it is overflowing (else otherwise)
+function setTableOverflowScroll() {
+	let tableWidth = Math.max.apply(Math, $("table").map(function(){ return $(this).width(); }).get());
+	let maxWidth = $("#popup").width();
+	if (maxWidth < tableWidth) {
+		$(".overflow-container").attr("class", "overflow-container-scroll");
+		$("table").css("border", "none");
+	}
+	else {
+		$(".overflow-container-scroll").attr("class", "overflow-container");
+		$("table").css("border", "1px solid #A9A9A9");
 	}
 }
 

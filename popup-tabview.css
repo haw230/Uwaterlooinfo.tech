@@ -157,19 +157,11 @@ table {
 	border-spacing: 0;
 }
 
-@media screen and (max-width: 800px) {
-
-	.overflow-container {
-		overflow-x: scroll;
-		border-radius: 5px 5px 0 0;
-		box-shadow: 0 0 0 1px #A9A9A9;
-		max-height: 550px;
-	}
-
-	table {
-		border: none;
-	}
-
+.overflow-container-scroll {
+	overflow-x: scroll;
+	border-radius: 5px 5px 0 0;
+	box-shadow: 0 0 0 1px #A9A9A9;
+	/* max-height: 550px; */
 }
 
 table:empty {
@@ -178,6 +170,7 @@ table:empty {
 
 thead th {
 	position: sticky;
+	position: -webkit-sticky;
 	top: 0;
 	background-color: #f8f8ff;
 	box-shadow: 0 1px 0 #ddd
@@ -220,6 +213,13 @@ thead th {
 
 .table-caption {
 	background-color: #f8f8ff;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 6px;
+	overflow: hidden;
 }
 
 /* Track */
