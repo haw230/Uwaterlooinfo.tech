@@ -66,6 +66,7 @@ body {
 	top: 26px;
 	position: absolute;
 	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
 	border: 1px solid #ddd;
 	border-top: 0;
 	background-color: white;
