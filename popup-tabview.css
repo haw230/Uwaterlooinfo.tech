@@ -157,10 +157,15 @@ table {
 	border-spacing: 0;
 }
 
+.overflow-container {
+	-webkit-overflow-scrolling: touch;
+}
+
 .overflow-container-scroll {
 	overflow-x: scroll;
 	border-radius: 5px 5px 0 0;
 	box-shadow: 0 0 0 1px #A9A9A9;
+	-webkit-overflow-scrolling: touch;
 	/* max-height: 550px; */
 }
 
