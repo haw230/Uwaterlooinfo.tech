@@ -13,7 +13,7 @@ function ajaxRequestSubject(subject, number, terms) {
 				$("#error").css("display", "block");
 				updateAutoComplete();
 			}
-			else {
+			else if (terms[0][0] < terms[1][0]) {
 				$("#courseInfo").css("display", "none");
 				let restCall1 = `https://api.uwaterloo.ca/v2/terms/${terms[0][0]}/${subject}/${number}/schedule.json`;
 				let restCall2 = `https://api.uwaterloo.ca/v2/terms/${terms[1][0]}/${subject}/${number}/schedule.json`;
@@ -32,13 +32,36 @@ function ajaxRequestSubject(subject, number, terms) {
 					});
 					updateCourseInfo(result.data);
 					$("#courseInfo").css("display", "block");
-					/*$(".overflow-container").each(function(index) {
+					$(".overflow-container").each(function(index) {
 						if ($(this).css("max-height") === `${$(this).innerHeight()}px`) {
 							$(this).css("border-radius", "5px 0 0 0");
 						}
-					});*/
+					});
 					updateAutoComplete();
-					setTableOverflowScroll();
+				});
+			}
+			else {
+				$("#courseInfo").css("display", "none");
+				let restCall1 = `https://api.uwaterloo.ca/v2/terms/${terms[0][0]}/${subject}/${number}/schedule.json`;
+				let restCall3 = `https://api.uwaterloo.ca/v2/courses/${subject}/${number}/examschedule.json`;
+
+				$.when(
+					ajaxCall(restCall1, parseCourseSchedule),
+				).then(function() {
+					return ajaxCall(restCall3, parseExamSchedule);
+				}).done(function() {
+					delLoader();
+					$("#scheduleTable").children().each(function(index) {
+						$(this).prepend(`<p>${terms[index][1]}</p>`);
+					});
+					updateCourseInfo(result.data);
+					$("#courseInfo").css("display", "block");
+					$(".overflow-container").each(function(index) {
+						if ($(this).css("max-height") === `${$(this).innerHeight()}px`) {
+							$(this).css("border-radius", "5px 0 0 0");
+						}
+					});
+					updateAutoComplete();
 				});
 			}
 		},
