@@ -485,7 +485,7 @@ function updateCourseInfo(json) {
 	$("#corequisites").html(`<span>Corequisites:</span> ${nullCheck(json.corequisites, "None")}`);
 	$("#prerequisites").html(`<span>Prerequisites:</span> ${nullCheck(json.prerequisites, "None")}`);
 	$("#links").html(
-		`<span>Links:</span> <a href=${json.url} target="_blank">UWCalender</a>
+		`<span>Links:</span> <a href=${json.url} target="_blank">UWCalendar</a>
 		<a href=https://uwflow.com/course/${json.subject.toLowerCase()}${json.catalog_number.toLowerCase()} target="_blank">UWflow</a>`);
 	$("#notes").html(
 		`<span>Note:</span> All data is retrivied using the University of Waterloo's
