@@ -100,7 +100,8 @@ function currentTerm(data) {
 	let terms = concatJsonObjectContent(data.listings)
 	let current = data.current_term;
 	let next = data.next_term;
-	searchCourse([[current, termName(terms, current)], [next, termName(terms, next)]]);
+	let termCur = termName(terms, current);
+	searchCourse([[current, termCur], [next, termNameManual(termCur)]]);
 }
 
 
@@ -123,6 +124,24 @@ function termName(array, term) {
 		}
 	});
 	return name;
+}
+
+
+function termNameManual(prevTerm) {
+	let array = prevTerm.split(" ");
+	let year = array[1];
+	let term;
+	if (array[0] === "Fall") {
+		year = `${parseInt(year) + 1}`
+		term = "Winter";
+	}
+	else if (array[0] === "Winter") {
+		term = "Spring";
+	}
+	else if (array[0] == "Spring") {
+		term = "Fall";
+	}
+	return `${term} ${year}`
 }
 
 
