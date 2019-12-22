@@ -273,31 +273,31 @@ body {
   border-top: none;
 }
 
-#infoTables td .LEC {
+#infoTables td.LEC {
   background-color: #f7fcfe;
   border-left: 4px solid #b2d0dd;
 }
-#infoTables td .TUT {
+#infoTables td.TUT {
   background-color: #f9fcf9;
   border-left: 4px solid #bfd2bf;
 }
-#infoTables td .TST {
+#infoTables td.TST {
   background-color: #fffcf8;
   border-left: 4px solid #e2ceb2;
 }
-#infoTables td .LAB {
+#infoTables td.LAB {
   background-color: #fcf8f8;
   border-left: 4px solid #d0b8b7;
 }
-#infoTables td .SEM {
+#infoTables td.SEM {
   background-color: #fff8f8;
   border-left: 4px solid #eac5c5;
 }
-#infoTables td .PRJ {
+#infoTables td.PRJ {
   background-color: #fbf9fd;
   border-left: 4px solid #c9bed5;
 }
-#infoTables td .EXAM {
+#infoTables td.EXAM {
   background-color: #f9f9f9;
   border-left: 4px solid #d0d0d0;
 }
