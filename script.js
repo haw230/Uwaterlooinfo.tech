@@ -426,6 +426,8 @@ $(document).ready(function() {
 		if (e.which === 13 && value !== undefined) {
 			clearCourseInfo();
 			addLoader();
+			$("#searchBox").blur();
+			$("#autocomplete").css("display", "none");
 			currentTermSearch();
 		}
 	});
