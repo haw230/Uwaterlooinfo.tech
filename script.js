@@ -95,53 +95,49 @@ function ajaxCall(url, onSuccess = (x) => x) {
 }
 
 
-// parses out the current term and next term
-function currentTerm(data) {
-	let terms = concatJsonObjectContent(data.listings)
-	let current = data.current_term;
-	let next = data.next_term;
-	let termCur = termName(terms, current);
-	searchCourse([[current, termCur], [next, termNameManual(termCur)]]);
+// searches the relvent information based on the current date
+function currentTermSearch() {
+	let d = new Date();
+	let year = d.getFullYear();
+	let month = d.getMonth();
+	let current = dateToTermID(year, month);
+	let termCur = getTermName(current);
+	let next = month + 4 > 12 ? dateToTermID(year + 1, (month + 4) % 12) : dateToTermID(year, month + 4);
+	let termNext = getTermName(next);
+	searchCourse([[current, termCur], [next, termNext]]);
+
 }
 
 
-// concatenates all values in an json object into a list
-function concatJsonObjectContent(obj) {
-	let list = [];
-	Object.keys(obj).forEach(function(key) {
-		list = list.concat(obj[key]);
-	});
-	return list;
+// converts year month to term id
+function dateToTermID(year, month) {
+	let prefix = 1000 + (year % 100) * 10;
+	let suffix = 0;
+
+	if (month >= 9 && month <= 12) {
+		suffix = 9;
+	} else if (month >= 1 && month <= 4) {
+		suffix = 1;
+	} else {
+		suffix = 5;
+	}
+	return `${prefix + suffix}`
 }
 
 
-// gets the actual name of the term
-function termName(array, term) {
-	let name = "";
-	array.forEach(function(obj) {
-		if (obj.id == term) {
-			name = obj.name;
-		}
-	});
-	return name;
-}
+// gets the name of the term given its ID
+function getTermName(id) {
+	id = parseInt(id);
+	let season = id % 10;
+	let year = 2000 + ((id % 1000) - season) / 10;
 
-
-function termNameManual(prevTerm) {
-	let array = prevTerm.split(" ");
-	let year = array[1];
-	let term;
-	if (array[0] === "Fall") {
-		year = `${parseInt(year) + 1}`
-		term = "Winter";
+	if (season === 1) {
+		return `Winter ${year}`;
+	} else if (season === 5) {
+		return `Spring ${year}`;
+	} else {
+		return `Fall ${year}`;
 	}
-	else if (array[0] === "Winter") {
-		term = "Spring";
-	}
-	else if (array[0] == "Spring") {
-		term = "Fall";
-	}
-	return `${term} ${year}`
 }
 
 
@@ -399,7 +395,7 @@ $(document).ready(function() {
 		if ($("#searchBox").val() !== undefined) {
 			clearCourseInfo();
 			addLoader();
-			ajaxCall(`https://api.uwaterloo.ca/v2/terms/list.json`, currentTerm);
+			currentTermSearch();
 		}
 	});
 
@@ -415,7 +411,7 @@ $(document).ready(function() {
 		addLoader();
 		let value = $(this).attr("id");
 		$("#searchBox").val(value);
-		ajaxCall(`https://api.uwaterloo.ca/v2/terms/list.json`, currentTerm);
+		currentTermSearch();
 		$("#autocomplete").css("display", "none");
 	});
 
@@ -424,7 +420,7 @@ $(document).ready(function() {
 		if (e.which == 13 && value !== undefined) {
 			clearCourseInfo();
 			addLoader();
-			ajaxCall(`https://api.uwaterloo.ca/v2/terms/list.json`, currentTerm);
+			currentTermSearch();
 		}
 	});
 
