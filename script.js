@@ -1,3 +1,5 @@
+// main javascript file
+
 // main ajax request function that chains all other functions together
 function ajaxRequestSubject(subject, number, terms) {
 	$.ajax({
@@ -391,6 +393,10 @@ function nullCheck(string, returnValue) {
 // document event bindings
 $(document).ready(function() {
 
+	$(window).bind("popstate", function() {
+  		$.getScript(location.href);
+    });
+
 	$("#searchButton").click(function() {
 		if ($("#searchBox").val() !== undefined) {
 			clearCourseInfo();
@@ -417,7 +423,7 @@ $(document).ready(function() {
 
 	$(document).on('keypress', function(e) {
 		let value = $("#searchBox").val();
-		if (e.which == 13 && value !== undefined) {
+		if (e.which === 13 && value !== undefined) {
 			clearCourseInfo();
 			addLoader();
 			currentTermSearch();
@@ -441,7 +447,11 @@ $(document).ready(function() {
 
 	$(window).resize(function () {
 		setTableOverflowScroll();
-	})
+	});
+
+	$("#logo").click(function() {
+		window.open("https://uwaterlooinfo.tech", "_self");
+	});
 
 })
 
@@ -461,6 +471,7 @@ function delLoader() {
 // retrives and displays all course info given the terms
 function searchCourse(term) {
 	let input = $("#searchBox").val().replace(/ /g, '').replace(/[^\w\s]/gi, '');
+	window.history.replaceState(null, null, `?course=${input.toLowerCase()}`);
 
 	if (input.length > 0 && !(/^\d+$/.test(input))) {
 		let index = firstNumberIndex(input);
@@ -609,7 +620,22 @@ function retriveAllCourses() {
 function retriveApiKey() {
 	jQuery.get('apikey.txt', function(data) {
 		apiKey = data;
+		urlParam();
 	});
+}
+
+
+// read url parameter
+function urlParam() {
+	let searchParams = new URLSearchParams(window.location.search);
+	if (searchParams.has("course")) {
+		clearCourseInfo();
+		addLoader();
+		let value = searchParams.get("course");
+		$("#searchBox").val(value);
+		$("#searchBox").blur();
+		currentTermSearch();
+	}
 }
 
 
@@ -618,6 +644,6 @@ var courses;
 var apiKey;
 
 window.onload = function() {
-  retriveAllCourses();
-  retriveApiKey();
+	retriveAllCourses();
+	retriveApiKey();
 }
