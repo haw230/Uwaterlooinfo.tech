@@ -187,13 +187,13 @@ body {
   font-weight: bold;
 }
 
-#antirequisites a, #corerequisites a, #prerequisites a {
+#antirequisites a, #corequisites a, #prerequisites a {
   color: #909090;
   text-decoration: none;
   font-weight: 500;
 }
 
-#antirequisites a:hover, #corerequisites a:hover, #prerequisites a:hover {
+#antirequisites a:hover, #corequisites a:hover, #prerequisites a:hover {
   color: #696969;
   text-decoration: underline;
 }
