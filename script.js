@@ -12,6 +12,7 @@ function ajaxRequestSubject(subject, number, terms) {
 			if (jQuery.isEmptyObject(result.data)) {
 				delLoader();
 				console.log("Invalid course code");
+				$("#error").html("Invalid course code");
 				$("#error").css("display", "block");
 				updateAutoComplete();
 			}
@@ -34,11 +35,6 @@ function ajaxRequestSubject(subject, number, terms) {
 					});
 					updateCourseInfo(result.data);
 					$("#courseInfo").css("display", "block");
-					/*$(".overflow-container").each(function(index) {
-						if ($(this).css("max-height") === `${$(this).innerHeight()}px`) {
-							$(this).css("border-radius", "5px 0 0 0");
-						}
-					});*/
 					updateAutoComplete();
 					setTableOverflowScroll();
 				});
@@ -59,11 +55,6 @@ function ajaxRequestSubject(subject, number, terms) {
 					});
 					updateCourseInfo(result.data);
 					$("#courseInfo").css("display", "block");
-					/*$(".overflow-container").each(function(index) {
-						if ($(this).css("max-height") === `${$(this).innerHeight()}px`) {
-							$(this).css("border-radius", "5px 0 0 0");
-						}
-					});*/
 					updateAutoComplete();
 					setTableOverflowScroll();
 				});
@@ -73,6 +64,9 @@ function ajaxRequestSubject(subject, number, terms) {
 			console.log("error");
   			let err = JSON.parse(xhr.responseText);
   			console.log(err.Message);
+  			delLoader();
+  			$("#error").html("Request timed out");
+  			$("#error").css("display", "block");
 		},
 	});
 }
@@ -92,6 +86,9 @@ function ajaxCall(url, onSuccess = (x) => x) {
 			console.log("error");
   			let err = JSON.parse(xhr.responseText);
   			console.log(err.Message);
+  			delLoader();
+  			$("#error").html("Request timed out");
+  			$("#error").css("display", "block");
 		},
 	});
 }
@@ -556,7 +553,7 @@ function parseRequisite(req) {
 	let length = req.length;
 	let prev = "";
 	for (let i = 0; i < length; i++) {
-		if (isNumber(req[i])) {
+		if (isNumber(req[i][0])) {
 			if (prev === "") {
 				prev = req[i - 1];
 
