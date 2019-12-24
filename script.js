@@ -505,13 +505,85 @@ function firstNumberIndex(string) {
 }
 
 
+// checks if n is a valid number
+function isNumber(n) {
+	return !isNaN(n);
+}
+
+
+// checks if values exists in a multi-dimensional sorted array at position
+function binaryMultArraySearch(value, array, position) {
+	let lower = 0;
+	let upper = array.length - 1;
+	while (lower <= upper) {
+		let centre = Math.round((lower + upper) / 2);
+		let element = array[centre][position];
+		if (element === value) {
+			return true;
+		} else if (value > element) {
+			lower = centre + 1;
+		} else if (value < element) {
+			upper = centre - 1;
+		}
+	}
+	return false;
+}
+
+
+// joins an array with space as seperator except for punctuation
+function joinPunctuation(array) {
+	let string = "";
+	let length = array.length;
+	if (length >= 1) {
+		string += array[0];
+	}
+	for (let i = 1; i < length; i++) {
+		let element = array[i];
+		if (element === ";" || element === "." || element === ",") {
+			string += element;
+		} else {
+			string += " ";
+			string += element;
+		}
+	}
+	return string;
+}
+
+
+// adds links to req if it contains a course code
+function parseRequisite(req) {
+	req = req.replace(/\//g, " / ").replace(/\(/g, "( ").replace(/\)/g, " )").replace(/\;/g, " ;").replace(/\./g, " .").replace(/\,/g, " ,").split(" ");
+	let length = req.length;
+	let prev = "";
+	for (let i = 0; i < length; i++) {
+		if (isNumber(req[i])) {
+			if (prev === "") {
+				prev = req[i - 1];
+
+			}
+			let courseCode = `${req[i - 1]}${req[i]}`;
+			courseCode = courseCode.toUpperCase();
+			if (binaryMultArraySearch(`${req[i - 1]}${req[i]}`.toUpperCase(), courses, 0)) {
+				prev = req[i - 1];
+				let courseCode = `${req[i - 1]}${req[i]}`.toUpperCase();
+				req[i] = `<a href="https://uwaterlooinfo.tech/?course=${courseCode.toLowerCase()}">${req[i]}</a>`;
+			} else if (binaryMultArraySearch(`${prev}${req[i]}`.toUpperCase(), courses, 0)) {
+				let courseCode = `${prev}${req[i]}`.toUpperCase();
+				req[i] = `<a href="https://uwaterlooinfo.tech/?course=${courseCode.toLowerCase()}">${req[i]}</a>`;
+			}
+		}
+	}
+	return joinPunctuation(req);
+}
+
+
 // updates course info in html aside from course and exam schedule
 function updateCourseInfo(json) {
 	$("#title").html(`<span>Course:</span> ${json.subject} ${json.catalog_number}: ${json.title}`);
 	$("#description").html(`<span>Description:</span> ${nullCheck(json.description, "None")}`);
-	$("#antirequisites").html(`<span>Antirequisites:</span> ${nullCheck(json.antirequisites, "None")}`);
-	$("#corequisites").html(`<span>Corequisites:</span> ${nullCheck(json.corequisites, "None")}`);
-	$("#prerequisites").html(`<span>Prerequisites:</span> ${nullCheck(json.prerequisites, "None")}`);
+	$("#antirequisites").html(`<span>Antirequisites:</span> ${parseRequisite(nullCheck(json.antirequisites, "None"))}`);
+	$("#corequisites").html(`<span>Corequisites:</span> ${parseRequisite(nullCheck(json.corequisites, "None"))}`);
+	$("#prerequisites").html(`<span>Prerequisites:</span> ${parseRequisite(nullCheck(json.prerequisites, "None"))}`);
 	$("#links").html(
 		`<span>Links:</span> <a href=${json.url} target="_blank">UWCalendar</a>
 		<a href=https://uwflow.com/course/${json.subject.toLowerCase()}${json.catalog_number.toLowerCase()} target="_blank">UWflow</a>`);
@@ -545,7 +617,7 @@ function autoComplete(search) {
 		search = search.replace(/ /g, "");
 		if (search !== "") {
 			search = search.toLowerCase();
-			let possibleTerms = courses.filter(x => (includesFirst(search, x.toLowerCase())));
+			let possibleTerms = courses.filter(x => (includesFirst(search, x[0].toLowerCase())));
 			let length = possibleTerms.length;
 			let html = "";
 
@@ -553,10 +625,8 @@ function autoComplete(search) {
 			let bottom = $("#search-field")[0].getBoundingClientRect().bottom + $(window)['scrollTop']();;
 
 			for (let i = 0; i < length; i++) {
-				let j = possibleTerms[i].indexOf(" ");
-				let data = [possibleTerms[i].slice(0, j), possibleTerms[i].slice(j)];
 				html +=
-				`<div class="suggestion" id="${data[0]}"><div>${data[0]}</div><div>${data[1]}</div></div>`;
+				`<div class="suggestion" id="${possibleTerms[i][0]}"><div>${possibleTerms[i][0]}</div><div>${possibleTerms[i][1]}</div></div>`;
 			}
 			setMaxHeight();
 			$("#autocomplete").html(html);
@@ -614,6 +684,11 @@ function setTableOverflowScroll() {
 function retriveAllCourses() {
 	jQuery.get('courses.txt', function(data) {
     	courses = data.split("\n");
+    	length = courses.length;
+		for (let i = 0; i < length; i++) {
+			let j = courses[i].indexOf(" ");
+			courses[i] = [courses[i].slice(0, j), courses[i].slice(j)];
+		}
 	});
 }
 
@@ -633,9 +708,10 @@ function urlParam() {
 	if (searchParams.has("course")) {
 		clearCourseInfo();
 		addLoader();
-		let value = searchParams.get("course");
+		let value = searchParams.get("course").toUpperCase();
 		$("#searchBox").val(value);
 		$("#searchBox").blur();
+		$("#autocomplete").css("display", "none");
 		currentTermSearch();
 	}
 }

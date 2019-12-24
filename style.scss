@@ -222,6 +222,28 @@ body {
 	font-weight: bold;
 }
 
+#antirequisites a, #corerequisites a, #prerequisites a {
+	color: #909090;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+#antirequisites a:hover, #corerequisites a:hover, #prerequisites a:hover {
+	color: #696969;
+	text-decoration: underline;
+}
+
+#links a, #notes a {
+	color: #2050D5;
+	text-decoration: none;
+	font-weight: 500;
+}
+
+#links a:hover, #notes a:hover {
+	color: #10369E;
+	text-decoration: underline;
+}
+
 #error {
 	text-align: center;
 	display: none;
