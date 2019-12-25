@@ -558,7 +558,6 @@ function parseRequisite(req) {
 	req = req.replace(/\//g, " / ").replace(/\(/g, " ( ").replace(/\)/g, " ) ").replace(/\;/g, " ; ").replace(/\./g, " . ").replace(/\,/g, " , ").split(" ");
 	let length = req.length;
 	let prev = "";
-	console.log(req);
 	for (let i = 0; i < length; i++) {
 		if (isNumber(req[i][0])) {
 			if (prev === "") {
