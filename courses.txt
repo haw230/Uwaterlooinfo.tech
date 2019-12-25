@@ -7348,4 +7348,3 @@ WS499B Senior Honours Thesis
 WS601 Advanced Feminist Theory: Special Topics in Women's Issues
 WS602 Theories of Gender Relations
 WS680 Directed Readings in Selected Topics
-operativeWork Term
