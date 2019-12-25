@@ -88,7 +88,7 @@ function ajaxCall(url, onSuccess = (x) => x) {
 		},
 		error: function(xhr, status, error) {
 			delLoader();
-			$("#error").html("Request timed out");
+			$("#error p").html("Request timed out");
   			$("#error").css("display", "block");
 			console.log("error");
   			if (!jQuery.isEmptyObject(xhr.responseText)) {
@@ -555,9 +555,10 @@ function joinPunctuation(array) {
 
 // adds links to req if it contains a course code
 function parseRequisite(req) {
-	req = req.replace(/\//g, " / ").replace(/\(/g, "( ").replace(/\)/g, " )").replace(/\;/g, " ;").replace(/\./g, " .").replace(/\,/g, " ,").split(" ");
+	req = req.replace(/\//g, " / ").replace(/\(/g, " ( ").replace(/\)/g, " ) ").replace(/\;/g, " ; ").replace(/\./g, " . ").replace(/\,/g, " , ").split(" ");
 	let length = req.length;
 	let prev = "";
+	console.log(req);
 	for (let i = 0; i < length; i++) {
 		if (isNumber(req[i][0])) {
 			if (prev === "") {
