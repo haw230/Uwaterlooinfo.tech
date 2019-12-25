@@ -118,13 +118,13 @@ body {
   border-style: solid;
   transition: 0.7s;
   height: 22px;
-  padding-left: 3px;
 }
 #searchArea #search-field #input-box-style #searchBox {
   z-index: 1;
   outline: none;
   border: none;
   height: 100%;
+  padding-left: 3px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 #searchArea #search-field #input-box-style:focus-within {
@@ -190,7 +190,6 @@ body {
 #antirequisites a, #corequisites a, #prerequisites a {
   color: #909090;
   text-decoration: none;
-  font-weight: 500;
 }
 
 #antirequisites a:hover, #corequisites a:hover, #prerequisites a:hover {
@@ -201,7 +200,6 @@ body {
 #links a, #notes a {
   color: #2050D5;
   text-decoration: none;
-  font-weight: 500;
 }
 
 #links a:hover, #notes a:hover {

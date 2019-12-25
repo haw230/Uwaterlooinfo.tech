@@ -7,13 +7,14 @@ function ajaxRequestSubject(subject, number, terms) {
 		url: `https://api.uwaterloo.ca/v2/courses/${subject}/${number}.json`,
 		dataType: "json",
 		data: {key: apiKey},
+		timeout: 12000,
 		success: function(result) {
 
 			if (jQuery.isEmptyObject(result.data)) {
 				delLoader();
-				console.log("Invalid course code");
-				$("#error").html("Invalid course code");
+				$("#error p").html("Invalid course code");
 				$("#error").css("display", "block");
+				console.log("Invalid course code");
 				updateAutoComplete();
 			}
 			else if (terms[0][0] < terms[1][0]) {
@@ -61,12 +62,14 @@ function ajaxRequestSubject(subject, number, terms) {
 			}
 		},
 		error: function(xhr, status, error) {
-			console.log("error");
-  			let err = JSON.parse(xhr.responseText);
-  			console.log(err.Message);
-  			delLoader();
-  			$("#error").html("Request timed out");
+			delLoader();
+			$("#error p").html("Request timed out");
   			$("#error").css("display", "block");
+			console.log("error");
+			if (!jQuery.isEmptyObject(xhr.responseText)) {
+	  			let err = JSON.parse(xhr.responseText);
+	  			console.log(err.Message);
+	  		}
 		},
 	});
 }
@@ -79,16 +82,19 @@ function ajaxCall(url, onSuccess = (x) => x) {
 		url: url,
 		dataType: "json",
 		data: {key: apiKey},
+		timeout: 12000,
 		success: function(result) {
 			onSuccess(result.data);
 		},
 		error: function(xhr, status, error) {
-			console.log("error");
-  			let err = JSON.parse(xhr.responseText);
-  			console.log(err.Message);
-  			delLoader();
-  			$("#error").html("Request timed out");
+			delLoader();
+			$("#error").html("Request timed out");
   			$("#error").css("display", "block");
+			console.log("error");
+  			if (!jQuery.isEmptyObject(xhr.responseText)) {
+	  			let err = JSON.parse(xhr.responseText);
+	  			console.log(err.Message);
+	  		}
 		},
 	});
 }
