@@ -542,11 +542,13 @@ function joinPunctuation(array) {
 	}
 	for (let i = 1; i < length; i++) {
 		let element = array[i];
-		if (element === ";" || element === "." || element === ",") {
-			string += element;
-		} else {
-			string += " ";
-			string += element;
+		if (!(element === "")) {
+			if (element === ";" || element === "." || element === ",") {
+				string += element;
+			} else {
+				string += " ";
+				string += element;
+			}
 		}
 	}
 	return string;
