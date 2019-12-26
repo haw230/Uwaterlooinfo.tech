@@ -593,7 +593,7 @@ function updateCourseInfo(json) {
 		`<span>Links:</span> <a href=${json.url} target="_blank">UWCalendar</a>
 		<a href=https://uwflow.com/course/${json.subject.toLowerCase()}${json.catalog_number.toLowerCase()} target="_blank">UWflow</a>`);
 	$("#notes").html(
-		`<span>Note:</span> All data is retrivied using the University of Waterloo's
+		`<span>Note:</span> All data is retrieved using the University of Waterloo's
 		<a href='https://github.com/uwaterloo/api-documentation#accessing-the-api' target="_blank">Open Data API</a>.`);
 }
 
