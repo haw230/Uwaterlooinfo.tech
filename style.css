@@ -149,6 +149,7 @@ body {
 }
 #searchArea #search-field input[type=search] {
   font-size: 16px;
+  border-radius: 3px;
 }
 
 #searchArea #search-field #autocomplete .suggestion {
