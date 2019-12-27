@@ -396,10 +396,6 @@ function nullCheck(string, returnValue) {
 // document event bindings
 $(document).ready(function() {
 
-	$(window).bind("popstate", function() {
-  		$.getScript(location.href);
-    });
-
 	$("#searchButton").click(function() {
 		if ($("#searchBox").val() !== undefined) {
 			clearCourseInfo();
@@ -420,8 +416,8 @@ $(document).ready(function() {
 		addLoader();
 		let value = $(this).attr("id");
 		$("#searchBox").val(value);
-		currentTermSearch();
 		$("#autocomplete").css("display", "none");
+		currentTermSearch();
 	});
 
 	$(document).on('keypress', function(e) {
@@ -476,7 +472,7 @@ function delLoader() {
 // retrives and displays all course info given the terms
 function searchCourse(term) {
 	let input = $("#searchBox").val().replace(/ /g, '').replace(/[^\w\s]/gi, '');
-	window.history.replaceState(null, null, `?course=${input.toLowerCase()}`);
+	window.history.pushState(null, null, `?course=${input.toLowerCase()}`);
 
 	if (input.length > 0 && !(/^\d+$/.test(input))) {
 		let index = firstNumberIndex(input);
