@@ -396,6 +396,10 @@ function nullCheck(string, returnValue) {
 // document event bindings
 $(document).ready(function() {
 
+	$(window).bind("popstate", function() {
+  		window.location.href = window.location.href;
+    });
+
 	$("#searchButton").click(function() {
 		if ($("#searchBox").val() !== undefined) {
 			clearCourseInfo();
