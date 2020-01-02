@@ -586,7 +586,7 @@ function removeStartNum(s) {
 }
 
 
-
+// gets the current URL with query string
 function getURL() {
 	return `${location.protocol}//${location.host}${location.pathname}`;
 }
