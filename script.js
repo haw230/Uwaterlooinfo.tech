@@ -101,15 +101,15 @@ function ajaxCall(url, onSuccess = (x) => x) {
 
 
 // searches the relvent information based on the current date
-function currentTermSearch() {
+function currentTermSearch(pushState = true) {
 	let d = new Date();
 	let year = d.getFullYear();
-	let month = d.getMonth();
+	let month = d.getMonth() + 1;
 	let current = dateToTermID(year, month);
 	let termCur = getTermName(current);
 	let next = month + 4 > 12 ? dateToTermID(year + 1, (month + 4) % 12) : dateToTermID(year, month + 4);
 	let termNext = getTermName(next);
-	searchCourse([[current, termCur], [next, termNext]]);
+	searchCourse([[current, termCur], [next, termNext]], pushState);
 
 }
 
@@ -396,8 +396,20 @@ function nullCheck(string, returnValue) {
 // document event bindings
 $(document).ready(function() {
 
-	$(window).bind("popstate", function() {
-  		window.location.href = window.location.href;
+	$(window).bind("popstate", function(event) {
+		let state = event.originalEvent.state;
+		let value = state.course;
+		clearCourseInfo();
+		if (value !== null) {
+			addLoader();
+			$("#searchBox").val(value);
+			$("#searchBox").blur();
+			$("#autocomplete").css("display", "none");
+			currentTermSearch(false);
+		} else {
+			$("#searchBox").val('');
+			$("#searchBox").focus();
+		}
     });
 
 	$("#searchButton").click(function() {
@@ -474,9 +486,12 @@ function delLoader() {
 
 
 // retrives and displays all course info given the terms
-function searchCourse(term) {
+function searchCourse(term, pushState = true) {
 	let input = $("#searchBox").val().replace(/ /g, '').replace(/[^\w\s]/gi, '');
-	window.history.pushState(null, null, `?course=${input.toLowerCase()}`);
+
+	if (pushState) {
+		window.history.pushState({"course": input}, null, `?course=${input.toLowerCase()}`);
+	}
 
 	if (input.length > 0 && !(/^\d+$/.test(input))) {
 		let index = firstNumberIndex(input);
@@ -727,6 +742,7 @@ var courses;
 var apiKey;
 
 window.onload = function() {
+	window.history.pushState({course: null}, null, '');
 	retriveAllCourses();
 	retriveApiKey();
 }
