@@ -467,7 +467,7 @@ $(document).ready(function() {
 	});
 
 	$("#logo").click(function() {
-		window.open("https://uwaterlooinfo.tech", "_self");
+		window.open(getURL(), "_self");
 	});
 
 })
@@ -570,13 +570,36 @@ function joinPunctuation(array) {
 }
 
 
+// returns s up until first number
+function removeEndNum(s) {
+	let index = firstNumberIndex(s);
+	let sub = s.substring(0, index);
+	return sub;
+}
+
+
+// retusn s after first number
+function removeStartNum(s) {
+	let index = firstNumberIndex(s);
+	let sub = s.substring(index);
+	return sub;
+}
+
+
+
+function getURL() {
+	return `${location.protocol}//${location.host}${location.pathname}`;
+}
+
+
 // adds links to req if it contains a course code
 function parseRequisite(req) {
 	req = req.replace(/\//g, " / ").replace(/\(/g, " ( ").replace(/\)/g, " ) ").replace(/\;/g, " ; ").replace(/\./g, " . ").replace(/\,/g, " , ").split(" ");
 	let length = req.length;
 	let prev = "";
+
 	for (let i = 0; i < length; i++) {
-		if (isNumber(req[i][0])) {
+		if (isNumber(req[i][0]) || isNumber(req[i][req[i].length - 1])) {
 			if (prev === "") {
 				prev = req[i - 1];
 
@@ -585,11 +608,16 @@ function parseRequisite(req) {
 			courseCode = courseCode.toUpperCase();
 			if (binaryMultArraySearch(`${req[i - 1]}${req[i]}`.toUpperCase(), courses, 0)) {
 				prev = req[i - 1];
-				let courseCode = `${req[i - 1]}${req[i]}`.toUpperCase();
-				req[i] = `<a href="https://uwaterlooinfo.tech/?course=${courseCode.toLowerCase()}">${req[i]}</a>`;
+				let courseCode = `${req[i - 1]}${req[i]}`.toLowerCase();
+				req[i] = `<a href="${getURL()}?course=${courseCode}">${req[i]}</a>`;
 			} else if (binaryMultArraySearch(`${prev}${req[i]}`.toUpperCase(), courses, 0)) {
-				let courseCode = `${prev}${req[i]}`.toUpperCase();
-				req[i] = `<a href="https://uwaterlooinfo.tech/?course=${courseCode.toLowerCase()}">${req[i]}</a>`;
+				let courseCode = `${prev}${req[i]}`.toLowerCase();
+				req[i] = `<a href="${getURL()}?course=${courseCode}">${req[i]}</a>`;
+			} else if (binaryMultArraySearch(`${req[i]}`.toUpperCase(), courses, 0)) {
+				prev = removeEndNum(`${req[i]}`);
+				let code = removeStartNum(`${req[i]}`);
+				let courseCode = `${prev}${code}`.toLowerCase();
+				req[i] = `${prev} <a href="${getURL()}?course=${courseCode}">${code}</a>`;
 			}
 		}
 	}
