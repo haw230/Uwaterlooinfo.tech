@@ -25,11 +25,11 @@ function ajaxRequestSubject(subject, number, terms) {
 
 				$.when(
 					ajaxCall(restCall1, parseCourseSchedule),
-				).then(function() {
+				).then(() => {
 					return ajaxCall(restCall2, parseCourseSchedule);
-				}).then(function() {
+				}).then(() => {
 					return ajaxCall(restCall3, parseExamSchedule);
-				}).done(function() {
+				}).then(() => {
 					delLoader();
 					$("#scheduleTable").children().each(function(index) {
 						$(this).prepend(`<p>${terms[index][1]}</p>`);
@@ -47,9 +47,9 @@ function ajaxRequestSubject(subject, number, terms) {
 
 				$.when(
 					ajaxCall(restCall1, parseCourseSchedule),
-				).then(function() {
+				).then(() => {
 					return ajaxCall(restCall3, parseExamSchedule);
-				}).done(function() {
+				}).then(() => {
 					delLoader();
 					$("#scheduleTable").children().each(function(index) {
 						$(this).prepend(`<p>${terms[index][1]}</p>`);
@@ -736,7 +736,7 @@ function setTableOverflowScroll() {
 
 // gets all course names from text file
 function retriveAllCourses() {
-	jQuery.get('courses.txt', function(data) {
+	$.get('courses.txt', function(data) {
     	courses = data.split("\n");
     	length = courses.length;
 		for (let i = 0; i < length; i++) {
@@ -749,9 +749,8 @@ function retriveAllCourses() {
 
 // gets the api key
 function retriveApiKey() {
-	jQuery.get('apikey.txt', function(data) {
+	return $.get('apikey.txt', function(data) {
 		apiKey = data;
-		urlParam();
 	});
 }
 
@@ -780,5 +779,5 @@ var apiKey;
 window.onload = function() {
 	window.history.pushState({course: null}, null, '');
 	retriveAllCourses();
-	retriveApiKey();
+	retriveApiKey().then(urlParam);
 }
