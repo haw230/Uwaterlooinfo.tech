@@ -186,16 +186,25 @@ body {
 #courseInfo, #disclaimer {
   text-align: left;
 }
-
-#courseInfo span, #disclaimer span {
+#courseInfo span.sub-title, #disclaimer span.sub-title {
   font-weight: bold;
+}
+
+span.course-link {
+  color: #909090;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: normal;
+}
+span.course-link:hover {
+  color: #696969;
+  text-decoration: underline;
 }
 
 #antirequisites a, #corequisites a, #prerequisites a {
   color: #909090;
   text-decoration: none;
 }
-
 #antirequisites a:hover, #corequisites a:hover, #prerequisites a:hover {
   color: #696969;
   text-decoration: underline;
@@ -205,7 +214,6 @@ body {
   color: #2050D5;
   text-decoration: none;
 }
-
 #links a:hover, #notes a:hover {
   color: #10369E;
   text-decoration: underline;
@@ -241,7 +249,6 @@ body {
   border-radius: 5px 5px 0 0;
   box-shadow: 0 0 0 1px #A9A9A9;
   -webkit-overflow-scrolling: touch;
-  /* max-height: 550px; */
 }
 
 #infoTables p {

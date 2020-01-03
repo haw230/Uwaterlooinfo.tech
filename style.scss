@@ -221,30 +221,49 @@ body {
 
 #courseInfo, #disclaimer {
 	text-align: left;
+
+	span.sub-title {
+		font-weight: bold;
+	}
 }
 
-#courseInfo span, #disclaimer span {
-	font-weight: bold;
-}
-
-#antirequisites a, #corequisites a, #prerequisites a {
+span.course-link {
 	color: #909090;
 	text-decoration: none;
+	cursor: pointer;
+	font-weight: normal;
+
+	&:hover {
+		color: #696969;
+		text-decoration: underline;
+	}
+
 }
 
-#antirequisites a:hover, #corequisites a:hover, #prerequisites a:hover {
-	color: #696969;
-	text-decoration: underline;
+#antirequisites, #corequisites, #prerequisites {
+
+	a {
+		color: #909090;
+		text-decoration: none;
+	}
+
+	a:hover {
+		color: #696969;
+		text-decoration: underline;
+	}
 }
 
-#links a, #notes a {
-	color: #2050D5;
-	text-decoration: none;
-}
+#links, #notes {
 
-#links a:hover, #notes a:hover {
-	color: #10369E;
-	text-decoration: underline;
+	a {
+		color: #2050D5;
+		text-decoration: none;
+	}
+
+	a:hover {
+		color: #10369E;
+		text-decoration: underline;
+	}
 }
 
 #error {
@@ -279,7 +298,6 @@ body {
 	border-radius: 5px 5px 0 0;
 	box-shadow: 0 0 0 1px #A9A9A9;
 	-webkit-overflow-scrolling: touch;
-	/* max-height: 550px; */
 }
 
 #infoTables {

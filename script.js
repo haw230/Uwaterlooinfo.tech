@@ -421,9 +421,23 @@ $(document).ready(function() {
 	});
 
 	$("#searchBox").focus(function() {
-		let value = $(this).val();
-		if (value !== undefined) {
-			autoComplete(value);
+		updateAutoComplete();
+	});
+
+	$("#searchBox").on("input", function() {
+		updateAutoComplete();
+	});
+
+	$(document).on("click", ".course-link", function(event) {
+		let value = $(this).attr("id");
+		if (event.ctrlKey) {
+			window.open(`${getURL()}?course=${value}`, '_blank'); 
+		} else {
+			clearCourseInfo();
+			addLoader();
+			$("#searchBox").val(value);
+			$("#autocomplete").css("display", "none");
+			currentTermSearch();
 		}
 	});
 
@@ -444,13 +458,6 @@ $(document).ready(function() {
 			$("#searchBox").blur();
 			$("#autocomplete").css("display", "none");
 			currentTermSearch();
-		}
-	});
-
-	$("#searchBox").on("input", function() {
-		let value = $(this).val();
-		if (value !== undefined) {
-			autoComplete(value);
 		}
 	});
 
@@ -604,20 +611,19 @@ function parseRequisite(req) {
 				prev = req[i - 1];
 
 			}
-			let courseCode = `${req[i - 1]}${req[i]}`;
-			courseCode = courseCode.toUpperCase();
+			let courseCode;
 			if (binaryMultArraySearch(`${req[i - 1]}${req[i]}`.toUpperCase(), courses, 0)) {
 				prev = req[i - 1];
-				let courseCode = `${req[i - 1]}${req[i]}`.toLowerCase();
-				req[i] = `<a href="${getURL()}?course=${courseCode}">${req[i]}</a>`;
+				courseCode = `${req[i - 1]}${req[i]}`.toUpperCase();
+				req[i] = `<span class="course-link" id="${courseCode}">${req[i]}</span>`;
 			} else if (binaryMultArraySearch(`${prev}${req[i]}`.toUpperCase(), courses, 0)) {
-				let courseCode = `${prev}${req[i]}`.toLowerCase();
-				req[i] = `<a href="${getURL()}?course=${courseCode}">${req[i]}</a>`;
+				courseCode = `${prev}${req[i]}`.toUpperCase();
+				req[i] = `<span class="course-link" id="${courseCode}">${req[i]}</span>`;
 			} else if (binaryMultArraySearch(`${req[i]}`.toUpperCase(), courses, 0)) {
 				prev = removeEndNum(`${req[i]}`);
 				let code = removeStartNum(`${req[i]}`);
-				let courseCode = `${prev}${code}`.toLowerCase();
-				req[i] = `${prev} <a href="${getURL()}?course=${courseCode}">${code}</a>`;
+				courseCode = `${prev}${code}`.toUpperCase();
+				req[i] = `${prev} <span class="course-link" id="${courseCode}">${code}</span>`;
 			}
 		}
 	}
@@ -627,16 +633,16 @@ function parseRequisite(req) {
 
 // updates course info in html aside from course and exam schedule
 function updateCourseInfo(json) {
-	$("#title").html(`<span>Course:</span> ${json.subject} ${json.catalog_number}: ${json.title}`);
-	$("#description").html(`<span>Description:</span> ${nullCheck(json.description, "None")}`);
-	$("#antirequisites").html(`<span>Antirequisites:</span> ${parseRequisite(nullCheck(json.antirequisites, "None"))}`);
-	$("#corequisites").html(`<span>Corequisites:</span> ${parseRequisite(nullCheck(json.corequisites, "None"))}`);
-	$("#prerequisites").html(`<span>Prerequisites:</span> ${parseRequisite(nullCheck(json.prerequisites, "None"))}`);
+	$("#title").html(`<span class="sub-title">Course:</span> ${json.subject} ${json.catalog_number}: ${json.title}`);
+	$("#description").html(`<span class="sub-title">Description:</span> ${nullCheck(json.description, "None")}`);
+	$("#antirequisites").html(`<span class="sub-title">Antirequisites:</span> ${parseRequisite(nullCheck(json.antirequisites, "None"))}`);
+	$("#corequisites").html(`<span class="sub-title">Corequisites:</span> ${parseRequisite(nullCheck(json.corequisites, "None"))}`);
+	$("#prerequisites").html(`<span class="sub-title">Prerequisites:</span> ${parseRequisite(nullCheck(json.prerequisites, "None"))}`);
 	$("#links").html(
-		`<span>Links:</span> <a href=${json.url} target="_blank">UWCalendar</a>
+		`<span class="sub-title">Links:</span> <a href=${json.url} target="_blank">UWCalendar</a>
 		<a href=https://uwflow.com/course/${json.subject.toLowerCase()}${json.catalog_number.toLowerCase()} target="_blank">UWflow</a>`);
 	$("#notes").html(
-		`<span>Note:</span> All data is retrieved using the University of Waterloo's
+		`<span class="sub-title">Note:</span> All data is retrieved using the University of Waterloo's
 		<a href='https://github.com/uwaterloo/api-documentation#accessing-the-api' target="_blank">Open Data API</a>.`);
 }
 
@@ -761,6 +767,8 @@ function urlParam() {
 		$("#searchBox").blur();
 		$("#autocomplete").css("display", "none");
 		currentTermSearch();
+	} else {
+		$("#searchBox").focus();
 	}
 }
 
