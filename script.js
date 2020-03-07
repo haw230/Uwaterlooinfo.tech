@@ -8,13 +8,13 @@ function ajaxRequestSubject(subject, number, terms) {
 		dataType: "json",
 		data: {key: apiKey},
 		timeout: 12000,
-		success: function(result) {
+		success: result => {
 
 			if (jQuery.isEmptyObject(result.data)) {
 				delLoader();
 				$("#error p").html("Invalid course code");
 				$("#error").css("display", "block");
-				console.log("Invalid course code");
+				alert("Invalid course code");
 				updateAutoComplete();
 			}
 			else if (terms[0][0] < terms[1][0]) {
@@ -61,11 +61,11 @@ function ajaxRequestSubject(subject, number, terms) {
 				});
 			}
 		},
-		error: function(xhr, status, error) {
+		error: (xhr, status, error) => {
 			delLoader();
 			$("#error p").html("Request timed out");
   			$("#error").css("display", "block");
-			console.log("error");
+			console.log("error"); // 10/10 error handling
 			if (!jQuery.isEmptyObject(xhr.responseText)) {
 	  			let err = JSON.parse(xhr.responseText);
 	  			console.log(err.Message);
@@ -532,7 +532,7 @@ function firstNumberIndex(string) {
 
 // checks if n is a valid number
 function isNumber(n) {
-	return !isNaN(n);
+	return !isNaN(n); // lol wtf
 }
 
 
